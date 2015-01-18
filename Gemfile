@@ -14,6 +14,10 @@ gemspec
 # gem 'debugger'
 gem "signinable"
 gem "haml-rails"
+gem 'angularjs-rails'
+gem 'angular-ui-bootstrap-rails'
+gem 'paperclip'
 group :development, :test do
   gem 'rspec-rails'
+  gem 'habtm_generator'
 end
