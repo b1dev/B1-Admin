@@ -22,8 +22,9 @@ module B1Admin
 
     config.i18n.enforce_available_locales = false
     config.assets.paths << config.root.join("app", "assets", "fonts")
-    config.assets.precompile += %w( admin/ie.js )
+    config.assets.precompile += %w( b1_admin/login.css b1_admin/login.js)
     config.i18n.load_path += Dir[config.root.join('locales', '*.{rb,yml}').to_s]
 
+    B1Admin::Config.setup! config
   end
 end

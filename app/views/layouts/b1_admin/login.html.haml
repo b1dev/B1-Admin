@@ -2,132 +2,46 @@
 %html{lang: I18n.locale}
   %head
     %meta{charset: "utf-8"}
-      %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
-        %title Login page | Nifty - Responsive admin template.
-        / STYLESHEET
-        / =================================================
-        / Roboto Font [ OPTIONAL ]
-        %link{:href => "http://fonts.googleapis.com/css?family=Roboto:400,700,300,500", :rel => "stylesheet", :type => "text/css"}
-          / Bootstrap Stylesheet [ REQUIRED ]
-          %link{:href => "css/bootstrap.min.css", :rel => "stylesheet"}
-            / Nifty Stylesheet [ REQUIRED ]
-            %link{:href => "css/nifty.min.css", :rel => "stylesheet"}
-              / SCRIPT
-              / =================================================
-              / Page Load Progress Bar [ OPTIONAL ]
-              %link{:href => "plugins/pace/pace.min.css", :rel => "stylesheet"}
-                %script{:src => "plugins/pace/pace.min.js"}
-                /
-                  REQUIRED
-                  You must include this in your project.
-                  
-                  RECOMMENDED
-                  This category must be included but you may modify which plugins or components which should be included in your project.
-                  
-                  OPTIONAL
-                  Optional plugins. You may choose whether to include it in your project or not.
-                  
-                  DEMONSTRATION
-                  This is to be removed, used for demonstration purposes only. This category must not be included in your project.
-                  
-                  SAMPLE
-                  Some script samples which explain how to initialize plugins or components. This category should not be included in your project.
-                  
-                  
-                  Detailed information and more samples can be found in the document.
-  / TIPS
-  / You may remove all ID or Class names which contain "demo-", they are only used for demonstration.
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
+    %title=B1Admin::Config.title
+    %link{href:"http://fonts.googleapis.com/css?family=Roboto:400,700,300,500", rel:"stylesheet", type: "text/css"}
+    = stylesheet_link_tag    "b1_admin/login", media: "all"
+    = javascript_include_tag "b1_admin/login"
   %body
     #container.cls-container
-      / BACKGROUND IMAGE
-      / ===================================================
       #bg-overlay.bg-img.img-balloon
-      / HEADER
-      / ===================================================
       .cls-header.cls-header-lg
         .cls-brand
-          %a.box-inline{:href => "index.html"}
+          %a.box-inline{href: root_path}
             / <img alt="Nifty Admin" src="img/logo.png" class="brand-icon">
             %span.brand-title
-              Nifty
-              %span.text-thin Admin
+              = B1Admin::Config.company_name
+              %span.text-thin=t("b1_admin.admin")
       / ===================================================
       / LOGIN FORM
       / ===================================================
       .cls-content
         .cls-content-sm.panel
           .panel-body
-            %p.pad-btm Sign In to your account
-            %form{:action => "index.html"}
+            %p.pad-btm=t("b1_admin.sign_in")
+            = form_for @login, url: login_path do |f|
               .form-group
                 .input-group
                   .input-group-addon
                     %i.fa.fa-user
-                  %input.form-control{:placeholder => "Username", :type => "text"}
+                  = f.text_field :email, class: "form-control", placeholder: t("b1_admin.login_plc")
               .form-group
                 .input-group
                   .input-group-addon
                     %i.fa.fa-asterisk
-                  %input.form-control{:placeholder => "Password", :type => "password"}
+                  = f.password_field :email, class: "form-control", placeholder: t("b1_admin.password_plc")
               .row
                 .col-xs-8.text-left.checkbox
                   %label.form-checkbox.form-icon
-                    %input{:type => "checkbox"}
-                      Remember me
+                    = f.check_box :remember_me
+                    = t("b1_admin.remember_me")
                 .col-xs-4
                   .form-group.text-right
-                    %button.btn.btn-success.text-uppercase{:type => "submit"} Sign In
-              .mar-btm
-                %em - or -
-              %button.btn.btn-primary.btn-lg.btn-block{:type => "button"}
-                %i.fa.fa-facebook.fa-fw
-                Login with Facebook
+                    = f.submit t("b1_admin.submit_login") ,class: "btn btn-success text-uppercase"
         .pad-ver
-          %a.btn-link.mar-rgt{:href => "pages-password-reminder.html"} Forgot password ?
-          %a.btn-link.mar-lft{:href => "pages-register.html"} Create a new account
-      / ===================================================
-      / DEMO PURPOSE ONLY
-      / ===================================================
-      .demo-bg
-        #demo-bg-list
-          .demo-loading
-            %i.fa.fa-refresh
-          %img.demo-chg-bg.bg-trans{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-trns.jpg"}
-            %img.demo-chg-bg{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-1.jpg"}
-              %img.demo-chg-bg.active{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-2.jpg"}
-                %img.demo-chg-bg{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-3.jpg"}
-                  %img.demo-chg-bg{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-4.jpg"}
-                    %img.demo-chg-bg{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-5.jpg"}
-                      %img.demo-chg-bg{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-6.jpg"}
-                        %img.demo-chg-bg{:alt => "Background Image", :src => "img/bg-img/thumbs/bg-img-7.jpg"}
-      / ===================================================
-    / ===================================================
-    / END OF CONTAINER
-    / JAVASCRIPT
-    / =================================================
-    / jQuery [ REQUIRED ]
-    %script{:src => "js/jquery-2.1.1.min.js"}
-    / BootstrapJS [ RECOMMENDED ]
-    %script{:src => "js/bootstrap.min.js"}
-    / Plugins [ OPTIONAL ]
-    %script{:src => "js/plugins.min.js"}
-    / Background Image [ DEMONSTRATION ]
-    %script{:src => "js/demo/bg-images.js"}
-    /
-      REQUIRED
-      You must include this in your project.
-      
-      RECOMMENDED
-      This category must be included but you may modify which plugins or components which should be included in your project.
-      
-      OPTIONAL
-      Optional plugins. You may choose whether to include it in your project or not.
-      
-      DEMONSTRATION
-      This is to be removed, used for demonstration purposes only. This category must not be included in your project.
-      
-      SAMPLE
-      Some script samples which explain how to initialize plugins or components. This category should not be included in your project.
-      
-      
-      Detailed information and more samples can be found in the document.
+          = link_to t("b1_admin.forgot_pass"), "#", class: "btn-link mar-rgt"

@@ -17,6 +17,7 @@ gem "haml-rails"
 gem 'angularjs-rails'
 gem 'angular-ui-bootstrap-rails'
 gem 'paperclip'
+gem "active_attr"
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

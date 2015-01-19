@@ -7,6 +7,7 @@ module B1Admin
   	end
 
   	def login
+  		@login = B1Admin::Login.new
   		render layout: "b1_admin/login"
   	end
   end

@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "angularjs-rails"
   s.add_dependency "angular-ui-bootstrap-rails"
   s.add_dependency "paperclip"
+  s.add_dependency "active_attr"
 
 
   s.add_development_dependency "sqlite3"
