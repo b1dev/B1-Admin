@@ -1,5 +1,5 @@
 !!!
-%html{lang: I18n.locale}
+%html{lang: I18n.locale,:"ng-app"=> "B1Admin"}
   %head
     %meta{charset: "utf-8"}
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
@@ -20,28 +20,29 @@
       / ===================================================
       / LOGIN FORM
       / ===================================================
-      .cls-content
+
+      .cls-content{:"ng-controller"=>"LoginFormController", :"data-login-url"=>url(:login)}
         .cls-content-sm.panel
           .panel-body
             %p.pad-btm=t("b1_admin.sign_in")
-            = form_for @login, url: login_path do |f|
+            = form_for @login, url: login_path  do |f|
               .form-group
                 .input-group
                   .input-group-addon
                     %i.fa.fa-user
-                  = f.text_field :email, class: "form-control", placeholder: t("b1_admin.login_plc")
+                  = f.text_field :email, class: "form-control", placeholder: t("b1_admin.login_plc") , :"ng-model"=>"login.email"
               .form-group
                 .input-group
                   .input-group-addon
                     %i.fa.fa-asterisk
-                  = f.password_field :email, class: "form-control", placeholder: t("b1_admin.password_plc")
+                  = f.password_field :password, class: "form-control", placeholder: t("b1_admin.password_plc"), :"ng-model"=>"login.password"
               .row
                 .col-xs-8.text-left.checkbox
                   %label.form-checkbox.form-icon
-                    = f.check_box :remember_me
+                    = f.check_box :remember_me ,{checked:false, :"ng-model"=>"login.remember_me"} , true, false
                     = t("b1_admin.remember_me")
                 .col-xs-4
                   .form-group.text-right
-                    = f.submit t("b1_admin.submit_login") ,class: "btn btn-success text-uppercase"
+                    %a.btn.btn-success.text-uppercase{:"ng-click" => "sign()", :"ng-href" => "#"}=t("b1_admin.submit_login")
         .pad-ver
           = link_to t("b1_admin.forgot_pass"), "#", class: "btn-link mar-rgt"
