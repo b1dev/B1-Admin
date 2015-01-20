@@ -1,5 +1,6 @@
 module B1Admin
   class User < ActiveRecord::Base
+    COOKIE_NAME = :admin_token
     has_secure_password
     includes :roles,:modules
     signinable expiration: B1Admin::Config.sign_in_expiration

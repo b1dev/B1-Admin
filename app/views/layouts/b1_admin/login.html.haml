@@ -8,6 +8,7 @@
     = stylesheet_link_tag    "b1_admin/login", media: "all"
     = javascript_include_tag "b1_admin/login"
   %body
+    = render "shared/error_alert"
     #container.cls-container
       #bg-overlay.bg-img.img-balloon
       .cls-header.cls-header-lg
@@ -17,15 +18,11 @@
             %span.brand-title
               = B1Admin::Config.company_name
               %span.text-thin=t("b1_admin.admin")
-      / ===================================================
-      / LOGIN FORM
-      / ===================================================
-
-      .cls-content{:"ng-controller"=>"LoginFormController", :"data-login-url"=>url(:login)}
+      .cls-content{:"ng-controller"=>"LoginFormController", :"data-login-url"=>url(:login), :"data-restore-url"=>url(:restore)}
         .cls-content-sm.panel
           .panel-body
             %p.pad-btm=t("b1_admin.sign_in")
-            = form_for @login, url: login_path  do |f|
+            = form_for @login, url: login_path,html:{:"ng-hide"=>"resetPass"}  do |f|
               .form-group
                 .input-group
                   .input-group-addon
@@ -44,5 +41,14 @@
                 .col-xs-4
                   .form-group.text-right
                     %a.btn.btn-success.text-uppercase{:"ng-click" => "sign()", :"ng-href" => "#"}=t("b1_admin.submit_login")
+            = form_tag restore_path ,:"ng-hide"=>"!resetPass" do 
+              .form-group
+                .input-group
+                  .input-group-addon
+                    %i.fa.fa-envelope
+                  %input.form-control{placeholder:t("b1_admin.login_plc"), type: :email,:"ng-model"=>"email"}
+              .form-group.text-right
+                %a.btn.btn-success.text-uppercase{:"ng-click" => "restore()"}=t("b1_admin.reset_pass")
         .pad-ver
-          = link_to t("b1_admin.forgot_pass"), "#", class: "btn-link mar-rgt"
+          = link_to t("b1_admin.forgot_pass"), "#", class: "btn-link mar-rgt",:"ng-hide"=>"resetPass",:"ng-click"=>"resetPass=true"
+          = link_to t("b1_admin.back_to_login"), "#", class: "btn-link mar-rgt",:"ng-hide"=>"!resetPass",:"ng-click"=>"resetPass=false"
