@@ -6,7 +6,7 @@ module B1Admin
     #End Relations
     
     #Validates
-    ALL_LANGS.each do |l|
+    B1Admin::LANGS.each do |l|
     	validates :"desc_#{l}", length: { in: 5..200},format: {with:/\A^[^`!@#\$%\^&*+_=]+\z/i}
   	end
     validates :action,     length: { in: 4..20},format: {with:/\A^[^`!@#\$%\^&*+=]+\z/i}, presence: true

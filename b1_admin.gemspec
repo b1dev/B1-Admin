@@ -2,6 +2,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
 require "b1_admin/version"
+require "b1_admin/langs"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
@@ -24,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "angular-ui-bootstrap-rails"
   s.add_dependency "paperclip"
   s.add_dependency "active_attr"
+  s.add_dependency "bcrypt"
 
 
   s.add_development_dependency "sqlite3"

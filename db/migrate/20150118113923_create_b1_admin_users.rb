@@ -17,7 +17,7 @@ class CreateB1AdminUsers < ActiveRecord::Migration
       t.datetime  :avatar_updated_at
       t.timestamps
     end
-    add_index :admin_users, [:email, :blocked, :active]
+    add_index :b1_admin_users, [:email, :blocked, :active]
   end
 
   def down
