@@ -32,5 +32,9 @@ module B1Admin
       raise B1Admin::Exception(4) if self.parent_module.nil?
       "b1_admin/#{self.parent_module.controller}/#{self.controller}_controller".camelize.constantize.instance_methods(false)
     end
+
+    def name
+      read_attribute "name_#{I18n.locale}"
+    end
   end
 end

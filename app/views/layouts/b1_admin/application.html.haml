@@ -1,0 +1,195 @@
+!!!
+%html{lang: I18n.locale,:"ng-app"=> "B1Admin"}
+  %head
+    %meta{charset: "utf-8"}
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
+    %title=B1Admin::Config.title
+    %link{href:"http://fonts.googleapis.com/css?family=Roboto:400,700,300,500", rel:"stylesheet", type: "text/css"}
+    = stylesheet_link_tag    "b1_admin/application", media: "all"
+    = javascript_include_tag "b1_admin/application"
+    %base{href:"/#{namespace}"}
+  %body
+    #container.effect.mainnav-lg
+      / NAVBAR
+      / ===================================================
+      %header#navbar
+        #navbar-container.boxed
+          / Brand logo & name
+          / ================================
+          .navbar-header
+            %a.navbar-brand{href:root_path}
+              = image_tag "b1_admin/logo.png", class: "brand-icon", alt: B1Admin::Config.company_name
+              .brand-title
+                %span.brand-text=B1Admin::Config.company_name
+          / ================================
+          / End brand logo & name
+          / Navbar Dropdown
+          / ================================
+          .navbar-content.clearfix
+            %ul.nav.navbar-top-links.pull-left
+              / Navigation toogle button
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              %li.tgl-menu-btn
+                %a.mainnav-toggle{href:"#"}
+                  %i.fa.fa-navicon.fa-lg
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              / End Navigation toogle button
+              / Messages Dropdown
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              %li.dropdown
+                %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                  %i.fa.fa-envelope.fa-lg
+                  %span.badge.badge-header.badge-warning=current_admin.unread_messages_count
+                / Message dropdown menu
+                .dropdown-menu.dropdown-menu-md.with-arrow
+                  .pad-all.bord-btm
+                    %p.text-lg.text-muted.text-thin.mar-no You have 3 messages.
+                  .nano.scrollable
+                    .nano-content
+                      %ul.head-list
+                        - current_admin.messages.each do |message|
+                          / Dropdown list
+                          %li
+                            %a.media{href:"#"}
+                              .media-left
+                                %img.img-circle.img-sm{src:message.sender.avatar}/
+                              .media-body
+                                .text-nowrap=message.sender.name
+                                %small.text-muted=message.time
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              / End message dropdown
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            %ul.nav.navbar-top-links.pull-right
+              / Language selector
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              %li.dropdown
+                %a#demo-lang-switch.lang-selector.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                  %span.lang-selected
+                    = image_tag "b1_admin/flags/#{I18n.locale}.png" ,class:"lang-flag" ,alt:t("b1_admin.languages.#{I18n.locale}")
+                    %span.lang-id=I18n.locale.upcase
+                    %span.lang-name=t("b1_admin.languages.#{I18n.locale}")
+                / Language selector menu
+                %ul.head-list.dropdown-menu.with-arrow
+                  - B1Admin::LANGS.each do |l|
+                    %li
+                      = link_to "##{l}", class: I18n.locale == l ? "active" : "" do
+                        = image_tag "b1_admin/flags/#{l}.png" ,class:"lang-flag" ,alt:t("b1_admin.languages.#{l}")
+                        %span.lang-id=l.upcase
+                        %span.lang-name=t("b1_admin.languages.#{l}")
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              / End language selector
+              / User dropdown
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              %li#dropdown-user.dropdown
+                %a.dropdown-toggle.text-right{"data-toggle" => "dropdown", :href => "#"}
+                  %span.pull-right
+                    = image_tag current_admin.avatar, class: "img-circle img-user media-object"
+                  .username.hidden-xs=current_admin.name
+                .dropdown-menu.dropdown-menu-md.dropdown-menu-right.with-arrow.panel-default
+                  / User dropdown menu
+                  %ul.head-list
+                    %li
+                      = link_to profile_path do
+                        %i.fa.fa-user.fa-fw.fa-lg
+                        =t("b1_admin.profile")
+                    %li
+                      = link_to messages_path do
+                        - if current_admin.unread_messages_count > 0
+                          %span.badge.badge-danger.pull-right=current_admin.unread_messages_count
+                        %i.fa.fa-envelope.fa-fw.fa-lg
+                        =t("b1_admin.messages")
+                  / Dropdown footer
+                  .pad-all.text-right
+                    = link_to logout_path, class: "btn btn-primary" do
+                      %i.fa.fa-sign-out.fa-fw
+                      =t("b1_admin.logout")
+              / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              / End user dropdown
+          / ================================
+          / End Navbar Dropdown
+      / ===================================================
+      / END NAVBAR
+      .boxed
+        / CONTENT CONTAINER
+        / ===================================================
+        #content-container
+          = yield
+        %nav#mainnav-container
+          #mainnav
+            #mainnav-menu-wrap
+              .nano
+                .nano-content
+                  - cache current_admin do
+                    %ul#mainnav-menu.list-group
+                      / Category name
+                      %li.list-header=t("b1_admin.allowed_modules")
+                      / Menu list item
+                      - current_admin.modules.each do |mod|
+                        %li
+                          = link_to "#" do
+                            %i{class:"fa #{mod.ico}"}
+                            %span.menu-title
+                              %strong=mod.name
+                            - if mod.child_modules.any?
+                              %i.fa.arrow
+                          - if mod.child_modules.any?
+                            %ul.collapse
+                              - mod.child_modules.each do |m|
+                                - if current_admin.can_access_to_module?(m)
+                                  %li
+                                    =link_to m.name , send("#{mod.controller}_#{m.controller}_path")
+                  / Widget
+                  / ================================
+                  .mainnav-widget
+                    / Show the button on collapsed navigation
+                    .show-small
+                      %a{"data-target" => "#demo-wg-server", "data-toggle" => "menu-widget", :href => "#"}
+                        %i.fa.fa-desktop
+                    / Hide the content on collapsed navigation
+                    - cache :server_status, expires_in: 1.month do
+                      #demo-wg-server.hide-small.mainnav-widget-content
+                        %ul.list-group
+                          %li.list-header.pad-no.pad-ver=t("b1_admin.server_status")
+                          %li.mar-btm
+                            %span.label.label-primary.pull-right="#{B1Admin::Usagewatch.uw_cpuused}%"
+                            %p CPU Usage
+                            .progress.progress-sm
+                              .progress-bar.progress-bar-primary{style:"width: #{B1Admin::Usagewatch.uw_cpuused}%;"}
+                                %span.sr-only="#{B1Admin::Usagewatch.uw_cpuused}%"
+                          %li.mar-btm
+                            %span.label.label-purple.pull-right="#{B1Admin::Usagewatch.uw_memused}%"
+                            %p Memory Usage
+                            .progress.progress-sm
+                              .progress-bar.progress-bar-purple{style:"width: #{B1Admin::Usagewatch.uw_memused}%;"}
+                                %span.sr-onlyt="#{B1Admin::Usagewatch.uw_memused}%"
+                          %li.pad-ver
+                            = link_to t("b1_admin.view_details") , "#",class: "btn btn-success btn-bock"
+                  / ================================
+                  / End widget
+            / ================================
+            / End menu
+        / ===================================================
+        / END MAIN NAVIGATION
+        / ASIDE
+        / ===================================================
+
+        / ===================================================
+        / END ASIDE
+      / FOOTER
+      / ===================================================
+      %footer#footer
+        / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        .hide-fixed.pull-right.pad-rgt="Version #{B1Admin::VERSION}"
+        / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        / Remove the class name "show-fixed" and "hide-fixed" to make the content always appears.
+        / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        %p.pad-lft="© 2015 “#{B1Admin::Config.title}“"
+      / ===================================================
+      / END FOOTER
+      / SCROLL TOP BUTTON
+      / ===================================================
+      %button#scroll-top.btn
+        %i.fa.fa-chevron-up
+      / ===================================================
+    / ===================================================
+    / END OF CONTAINER

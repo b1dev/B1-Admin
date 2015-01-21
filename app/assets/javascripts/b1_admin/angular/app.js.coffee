@@ -1,4 +1,4 @@
-app = angular.module("B1Admin", [])
+app = angular.module("B1Admin", ['ngRoute'])
 
 app.run [
     "$location"
@@ -21,5 +21,12 @@ app.run [
     $logProvider.debugEnabled true
   ]
   .config ['$locationProvider', ($locationProvider) ->
-    $locationProvider.html5Mode true
+    $locationProvider.html5Mode
+      enabled: true
+      #requireBase: false
+  ]
+  .config ['$routeProvider', ($routeProvider) ->
+    $routeProvider.when("/settings/modules",
+      controller: "ModulesController"
+    ).otherwise redirectTo: "/admin"
   ]

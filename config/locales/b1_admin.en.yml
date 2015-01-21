@@ -1,7 +1,16 @@
 en:
   b1_admin:
+    view_details: "Подробнее"
+    server_status: "Статус сервера"
+    allowed_modules: "Доступные модули"
+    messages: Сообщения
+    profile: Профиль
+    languages: 
+      ru: Русский
+      en: English
     error: "Ошибка"
     admin: "Admin"
+    logout: "Выйти"
     sign_in: "Вход в административную панель"
     login_plc: "Ваш email"
     password_plc: "Пароль"

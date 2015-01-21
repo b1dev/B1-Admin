@@ -19,6 +19,9 @@ gem 'angular-ui-bootstrap-rails'
 gem 'paperclip'
 gem "active_attr"
 gem "bcrypt"
+gem "actionpack-page_caching"
+gem "actionpack-action_caching"
+gem 'turbolinks'
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

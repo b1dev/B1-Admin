@@ -18,6 +18,10 @@ module B1Admin
 		  	rake "db:seed"
 		  end
 
+		  def copy_files
+		  	#copy_file "avatar-missing.png","app/assets/avatar-missing.png"
+		  end
+
 		end
   end
 end

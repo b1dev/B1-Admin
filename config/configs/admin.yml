@@ -1,5 +1,5 @@
 defaults: &defaults
-  title: "B1 Admin"
+  title: "B1 Dev"
   company_name: B1 Dev
   version: "1.0"
   max_password_attempts: 5

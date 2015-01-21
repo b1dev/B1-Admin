@@ -1,11 +1,11 @@
-angular.module("B1Admin").controller "LoginFormController", [
+angular.module("B1Admin").controller "ModulesController", [
   "$scope"
   "$http"
   "$element"
   "$window"
   "$rootScope"
   ($scope, $http, $element,$window,$rootScope) ->
-
+    console.log("qwdwq")
   	#Indicates form to show
     $scope.resetPass = false
 

@@ -20,7 +20,7 @@ module B1Admin
     #End Relations
 
 
-    has_attached_file :avatar, styles: { medium: "300x300>",thumb: "100x100>" }, default_url: "/system/avatar_missing.png"
+    has_attached_file :avatar, styles: { medium: "300x300>",thumb: "100x100>" }, default_url: "b1_admin/avatar-missing.png"
     
     # Check if current user has access to requested action
 		# @param  [String] Requested class
@@ -79,6 +79,15 @@ module B1Admin
         end
         nil
       end
+    end
+
+    #TODO
+    def unread_messages_count
+      3
+    end
+    #TODO
+    def messages
+      []
     end
     
     private
