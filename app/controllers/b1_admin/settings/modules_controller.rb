@@ -2,7 +2,7 @@ module B1Admin
   module Settings
     class ModulesController < B1Admin::ApplicationController
       #before_filter :module_exists? ,only:[:update,:create]
-
+      #layout false
       def index
         respond_to do |format|
           format.html

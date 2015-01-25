@@ -22,6 +22,7 @@ gem "bcrypt"
 gem "actionpack-page_caching"
 gem "actionpack-action_caching"
 gem 'turbolinks'
+gem "angular-turbolinks"
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

@@ -7,6 +7,7 @@ require 'b1_admin/usagewatch'
 require "active_attr"
 require "angularjs-rails"
 require "angular-ui-bootstrap-rails"
+#require "angular-turbolinks"
 require "signinable"
 
 module B1Admin

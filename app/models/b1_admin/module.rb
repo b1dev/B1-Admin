@@ -33,8 +33,20 @@ module B1Admin
       "b1_admin/#{self.parent_module.controller}/#{self.controller}_controller".camelize.constantize.instance_methods(false)
     end
 
+    # Return localized name
+    # @retrun [String]
     def name
       read_attribute "name_#{I18n.locale}"
+    end
+
+    # Check if current model is enabled
+    # @param  [String] current controller name
+    # @raise  [B1Admin::Exception] if param is incorrect
+    # @retrun [Boolean]
+    def is_active? name
+      names = name.split("/").reject{|item| self.class.to_s.split("::").first.underscore == item}
+      raise B1Admin::Exception(5,{name:"name",param: name.to_s}) unless names.any?
+      names.map{|i| i.to_s.downcase}.include?(self.controller.downcase)
     end
   end
 end

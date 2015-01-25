@@ -1,5 +1,5 @@
 !!!
-%html{lang: I18n.locale,:"ng-app"=> "B1Admin"}
+%html{lang: I18n.locale}
   %head
     %meta{charset: "utf-8"}
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
@@ -118,7 +118,7 @@
           #mainnav
             #mainnav-menu-wrap
               .nano
-                .nano-content
+                .nano-content{:"ng-controller"=>"LoginFormController"}
                   - cache current_admin do
                     %ul#mainnav-menu.list-group
                       / Category name
@@ -126,10 +126,10 @@
                       / Menu list item
                       - current_admin.modules.each do |mod|
                         %li
-                          = link_to "#" do
+                          = link_to "#","data-no-turbolink"=>"", :"ng-click"=>"sign($event)",class: mod.is_active?(params[:controller]) ? "active-sub" : "" do
                             %i{class:"fa #{mod.ico}"}
-                            %span.menu-title
-                              %strong=mod.name
+                            %span.menu-title{ :"ng-click"=>"sign($event)"}
+                              %strong{ :"ng-click"=>"sign($event)"}=mod.name
                             - if mod.child_modules.any?
                               %i.fa.arrow
                           - if mod.child_modules.any?
@@ -168,6 +168,7 @@
                   / End widget
             / ================================
             / End menu
+        
         / ===================================================
         / END MAIN NAVIGATION
         / ASIDE

@@ -26,7 +26,21 @@ app.run [
       #requireBase: false
   ]
   .config ['$routeProvider', ($routeProvider) ->
-    $routeProvider.when("/settings/modules",
+    $routeProvider.when('/admin/settings/modules', { templateUrl: '/assets/settings/modules/index.html.haml', controller: 'ModulesController' } )
+    $routeProvider.when("/",
       controller: "ModulesController"
-    ).otherwise redirectTo: "/admin"
+    ).otherwise redirectTo: "/admin/wefwefwe"
   ]
+# $(document).on('page:load', ->
+#   angular.bootstrap(document, ['B1Admin'])
+# )
+# $(document).on("page:fetch", Pace.start());
+# $(document).on("page:receive", Pace.stop());
+
+# $(document).on 'page:change', ->
+#   console.log("Wefwe")
+  
+$(document).on 'page:load', ->
+  $('[ng-app]').each ->
+    module = $(this).attr('ng-app')
+    angular.bootstrap(this, [app])
