@@ -21,8 +21,7 @@ gem "active_attr"
 gem "bcrypt"
 gem "actionpack-page_caching"
 gem "actionpack-action_caching"
-gem 'turbolinks'
-gem "angular-turbolinks"
+gem 'angular-ui-bootstrap-rails'
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

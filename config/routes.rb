@@ -10,6 +10,9 @@ B1Admin::Engine.routes.draw do
 
   namespace :settings do
   	resources :modules
+    namespace :modules do 
+      post "update_positions"
+    end
   	resources :roles
   	resources :permissions
   	resources :admins

@@ -1,0 +1,64 @@
+#page-title
+	%h1.page-header.text-overflow
+		=t("b1_admin.modules")
+#page-content{:"ng-controller"=>"ModulesController",:"data-url"=>settings_modules_path, :"data-update-positions-url"=>settings_modules_update_positions_path}
+	.row
+		.col-md-6
+			%script{:id => "items_renderer.html", :type => "text/ng-template"}
+
+			.panel
+				.panel-heading
+					.panel-title
+						- if user_can?(:destroy)
+							.btn.btn-primary=t("b1_admin.add")
+						.btn.btn-mint{"ng-click"=>"collapse()"}=t("b1_admin.collapse")
+						.btn.btn-purple{"ng-click"=>"expand()"}=t("b1_admin.uncollapse")
+						- if user_can?(:update_positions)
+							.btn.btn-success{"ng-click"=>"updatePositions()"}=t("b1_admin.update_positions")
+							.btn.btn-info{"ng-click"=>"revert()"}=t("b1_admin.revert_positions")
+				.panel-body
+					%div#tree-root{"ui-tree" => ""}
+						%ol{"ng-model" => "items", "ui-tree-nodes" => ""}
+							%li{ "ng-repeat" => "item in items", "ui-tree-node" => ""}
+								%div{"ui-tree-handle" => ""}
+									%button.btn.btn-success.btn-xm.nodrag{"data-nodrag" => true, "ng-click" => "toggle(this)"}
+										%i.nodrag{"ng-class" => "{'fa fa-angle-double-right': collapsed, 'fa fa-angle-double-down': !collapsed}"}
+									{{item.name}}
+									- if user_can?(:destroy)
+										%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "remove(this)"}
+											%i.fa.fa-minus-circle{"data-nodrag" => true}
+									- if user_can?(:edit)
+										%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
+											%i.fa.fa-pencil{"data-nodrag" => true}
+								%ol{"ng-class" => "{hidden: collapsed}", "ng-model" => "item.childs", "ui-tree-nodes" => ""}
+									%li{ "ng-repeat" => "item in item.childs", "ui-tree-node" => ""}
+										%div{"ui-tree-handle" => ""}
+											{{item.name}}
+											- if user_can?(:destroy)
+												%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "remove(this)"}
+													%i.fa.fa-minus-circle{"data-nodrag" => true}
+											- if user_can?(:edit)
+												%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
+													%i.fa.fa-pencil{"data-nodrag" => true}
+		{{ items | json }}
+		.col-md-6
+			.panel
+				.panel-heading
+					%h3.panel-title Dropdowns Addons
+				%form.form-horizontal
+					.panel-body
+						.input-group.mar-btm
+							.input-group-btn
+								%button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+									Action
+									%i.dropdown-caret.fa.fa-caret-down
+								%ul.dropdown-menu
+									%li
+										%a{:href => "#"} Action
+									%li
+										%a{:href => "#"} Another action
+									%li
+										%a{:href => "#"} Something else here
+
+
+

@@ -11,5 +11,9 @@ module B1Admin
 
       path.empty? ? "/" : "/#{path}"
     end
+
+    def user_can? method_name
+      true
+    end
   end
 end

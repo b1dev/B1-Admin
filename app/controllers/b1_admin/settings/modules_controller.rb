@@ -5,13 +5,19 @@ module B1Admin
       #layout false
       def index
         respond_to do |format|
-          format.html
+          format.html do 
+            render layout: !params.has_key?(:only_template)
+          end
           format.json do
-            items = B1Admin::Module.order('id ASC').page(params[:page]) 
+            items = B1Admin::Module.to_tree
             total = B1Admin::Module.count
-            render json: { data: items, total: total } 
+            render json: { items: items, total: total } 
           end
         end
+      end
+
+      def update_positions
+        
       end
 
       def edit;  @module  = B1Admin::Module.find_by_id(params[:id]) end

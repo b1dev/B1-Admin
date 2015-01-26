@@ -57,6 +57,11 @@ module B1Admin
         self.roles.map(&:parent_modules).flatten
       end
     end
+    
+    #TODO
+    def can? method_name, controller_name
+      true
+    end
 
     # Authenticate current user by password, block user if wrong password auth attempts greather of maximum
     # @note That method use gem "signinable"

@@ -1,36 +1,41 @@
 angular.module("B1Admin").controller "ModulesController", [
   "$scope"
+  '$resource'
   "$http"
   "$element"
-  "$window"
   "$rootScope"
-  ($scope, $http, $element,$window,$rootScope) ->
-    console.log("qwdwq")
-  	#Indicates form to show
-    $scope.resetPass = false
+  ($scope, $resource, $http, $element, $rootScope) ->
 
-    # Login model for form
-    $scope.login =
-      email: ""
-      password: ""
-      remember_me: false
+    $scope.items = []
 
-    #Model for reset password field
-    $scope.email = ""
+    Module = $resource("#{$element.data("url")}.json",{},{query: {isArray: false }})
 
-  	# Login action, send AJAX POST request to login url, refresh page on success or show error on fail
-    $scope.sign = ->
-      $http.post($element.data("loginUrl"), JSON.stringify(login:$scope.login)).success (resp) ->
-        $window.location.reload() if resp.success
-        $rootScope.error(".cls-content-sm.panel",resp.msg) unless resp.success
-      .error ->
-      	$rootScope.error(".cls-content-sm.panel",$rootScope.server_error)
-        
-  	# Resore password action, send AJAX POST request to restore url, show info on success or show error on fail
-    $scope.restore = ->
-      $http.post($element.data("restoreUrl"), JSON.stringify(email:$scope.email)).success (resp) ->
+    Module.query().$promise.then (data) ->
+      $scope.items = data.items
+      $scope.itemsClone = clone data.items
+
+    $scope.remove = (scope) ->
+      scope.remove()
+
+    $scope.toggle = (scope) ->
+      scope.toggle()
+
+    getRootNodesScope = ->
+      angular.element(document.getElementById("tree-root")).scope()
+
+    $scope.collapse = ->
+      scope = getRootNodesScope()
+      scope.collapseAll()
+
+    $scope.expand = ->
+      scope = getRootNodesScope()
+      scope.expandAll()
+
+    $scope.revert = ->
+      $scope.items = clone $scope.itemsClone
+
+    $scope.updatePositions = ->
+      $http.post($element.data("updatePositionsUrl"), JSON.stringify(items:$scope.items)).success (resp) ->
         $rootScope.info(".cls-content-sm.panel",resp.msg)  if resp.success
         $rootScope.error(".cls-content-sm.panel",resp.msg) unless resp.success
-      .error ->
-      	$rootScope.error(".cls-content-sm.panel",$rootScope.server_error)
 ]

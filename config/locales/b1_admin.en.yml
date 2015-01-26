@@ -1,5 +1,11 @@
 en:
   b1_admin:
+    update_positions: "Обновить позиции"
+    revert_positions: "Сбросить позиции"
+    add: "Добавить"
+    uncollapse: "Развернуть все"
+    collapse: "Свернуть все"
+    modules: "Модули"
     view_details: "Подробнее"
     server_status: "Статус сервера"
     allowed_modules: "Доступные модули"

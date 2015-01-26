@@ -48,5 +48,19 @@ module B1Admin
       raise B1Admin::Exception(5,{name:"name",param: name.to_s}) unless names.any?
       names.map{|i| i.to_s.downcase}.include?(self.controller.downcase)
     end
+
+    # Build tree of modules 
+    # @retrun [Array<Hash>] modules tree
+    def self.to_tree
+      to_tree_recoursive = lambda do |mod| 
+        {
+          name: mod.name,
+          id: mod.id,
+          childs: mod.modules.map{ |mod| to_tree_recoursive.call(mod) }
+        }
+      end
+      B1Admin::Module.where(parent_id:0).map{ |mod| to_tree_recoursive.call(mod) }
+    end
+
   end
 end
