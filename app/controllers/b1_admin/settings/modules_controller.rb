@@ -3,9 +3,12 @@ module B1Admin
     class ModulesController < B1Admin::ApplicationController
       #before_filter :module_exists? ,only:[:update,:create]
       #layout false
+
+      # Render view or return json of modules tree
       def index
         respond_to do |format|
           format.html do 
+            @module = B1Admin::Module.new
             render layout: !params.has_key?(:only_template)
           end
           format.json do
@@ -16,8 +19,27 @@ module B1Admin
         end
       end
 
+      # Update all modules positions or delete them
+      # @raise [B1Admin::Exception] if params from JS are invalid or module is not found
+      # @retrun [JSON]
       def update_positions
         
+        raise B1Admin::Exception(6,{name:update_all_params.inspect,type:"Array",is_type: update_all_params.class}) unless update_all_params.kind_of?(Array)
+        
+        existing_modules_ids = []
+
+        update_func = lambda do |items|
+          items.each_with_index do |item,i|
+            existing_modules_ids << item["id"]
+            childs = item["childs"].kind_of?(Array) ? item["childs"] : []
+            raise B1Admin::Exception(7,{text:"Item B1Admin::Module with id #{item['id']} not found"}) unless mod = B1Admin::Module.find_by_id(item["id"].to_i)
+            mod.update_attribute(:position,i)
+            update_func.call(childs)
+          end
+        end
+        update_func.call(update_all_params)
+        B1Admin::Module.destroy_all(["id NOT IN (?)", existing_modules_ids])
+        render json: { success: true }
       end
 
       def edit;  @module  = B1Admin::Module.find_by_id(params[:id]) end
@@ -60,7 +82,11 @@ module B1Admin
       	redirect_to request.referer
       end
       def mod_params
-        params.require(:module).permit(:name, :ico, :parent_id, :controller, :action,:id)
+        params.require(:item).permit(:name, :ico, :parent_id, :controller, :action,:id)
+      end
+
+      def update_all_params
+        params.require(:items)
       end
     end
   end

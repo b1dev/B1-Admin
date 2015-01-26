@@ -56,10 +56,10 @@ module B1Admin
         {
           name: mod.name,
           id: mod.id,
-          childs: mod.modules.map{ |mod| to_tree_recoursive.call(mod) }
+          childs: mod.modules.order(position: :asc).map{ |mod| to_tree_recoursive.call(mod) }
         }
       end
-      B1Admin::Module.where(parent_id:0).map{ |mod| to_tree_recoursive.call(mod) }
+      B1Admin::Module.where(parent_id:0).order(position: :asc).map{ |mod| to_tree_recoursive.call(mod) }
     end
 
   end

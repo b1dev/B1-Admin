@@ -45,7 +45,7 @@
 			.panel
 				.panel-heading
 					%h3.panel-title Dropdowns Addons
-				%form.form-horizontal
+				=form_for @module, url:settings_modules_path ,class: "form-horizontal" do |f|
 					.panel-body
 						.input-group.mar-btm
 							.input-group-btn
