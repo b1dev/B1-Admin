@@ -1,5 +1,14 @@
 en:
   b1_admin:
+    success: "Успешно!"
+    success_saved: "Успешно сохранено"
+    save: "Сохранить"
+    is_parent: "Нету(Это модуль родитель)"
+    parent_controller: "Модуль родитель"
+    title: "Название"
+    ico: "Класс иконки"
+    controller: "Контроллер"
+    new_module: "Новый модуль"
     update_positions: "Обновить позиции"
     revert_positions: "Сбросить позиции"
     add: "Добавить"

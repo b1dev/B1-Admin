@@ -9,8 +9,6 @@
 			.panel
 				.panel-heading
 					.panel-title
-						- if user_can?(:destroy)
-							.btn.btn-primary=t("b1_admin.add")
 						.btn.btn-mint{"ng-click"=>"collapse()"}=t("b1_admin.collapse")
 						.btn.btn-purple{"ng-click"=>"expand()"}=t("b1_admin.uncollapse")
 						- if user_can?(:update_positions)
@@ -40,25 +38,30 @@
 											- if user_can?(:edit)
 												%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
 													%i.fa.fa-pencil{"data-nodrag" => true}
-		{{ items | json }}
 		.col-md-6
 			.panel
 				.panel-heading
-					%h3.panel-title Dropdowns Addons
-				=form_for @module, url:settings_modules_path ,class: "form-horizontal" do |f|
+					%h3.panel-title#new_text=t("b1_admin.new_module")
+				= form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :moduleForm do 
 					.panel-body
-						.input-group.mar-btm
-							.input-group-btn
-								%button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
-									Action
-									%i.dropdown-caret.fa.fa-caret-down
-								%ul.dropdown-menu
-									%li
-										%a{:href => "#"} Action
-									%li
-										%a{:href => "#"} Another action
-									%li
-										%a{:href => "#"} Something else here
-
-
+						.form-group{"ng-class" => "{'has-error': moduleForm.controller.$invalid && moduleForm.$submitted}"}
+							= label_tag :controller, t("b1_admin.controller"), class:"col-sm-3 control-label"
+							.col-sm-9
+								= text_field_tag :controller,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.controller"
+						.form-group{"ng-class" => "{'has-error': moduleForm.ico.$invalid && moduleForm.$submitted}"}
+							= label_tag :ico, t("b1_admin.ico"), class:"col-sm-3 control-label"
+							.col-sm-9
+								= text_field_tag :ico,"" , class:"form-control",required: true,"ng-minlength"=>3 , "ng-model"=>"editedItem.ico"
+						.form-group{"ng-class" => "{'has-error': moduleForm.parent_id.$invalid && moduleForm.$submitted}"}
+							= label_tag :parent_id, t("b1_admin.parent_controller"), class:"col-sm-3 control-label"
+							.col-sm-9
+								=select_tag :parent_id,options_for_select([[t("b1_admin.is_parent"),0]] + parent_modules(@module.id).map{|d|[d.name,d.id]},@module.parent_id),class:"selectpicker",required: true, "ng-model"=>"editedItem.parent_id"
+						- B1Admin::LANGS.each do |l|
+							.form-group{"ng-class" => "{'has-error': moduleForm.name_#{l}.$invalid && moduleForm.$submitted}"}
+								= label_tag :"name_#{l}", "#{t("b1_admin.title")} #{l.upcase}", class:"col-sm-3 control-label"
+								.col-sm-9
+									= text_field_tag :"name_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.name_#{l}"
+					- if user_can?(:create) || user_can?(:update)
+						.panel-footer.text-right
+							= link_to t("b1_admin.save"),"#", class:"btn btn-info","ng-click" => "save()"
 

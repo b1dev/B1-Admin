@@ -9,7 +9,8 @@
 //= require angular-resource
 //= require angular-route
 //= require ./vendor/angular-ui-tree
-
+//= require ./vendor/bootstrap.min
+//= require ./vendor/plugins.min
 //= require ./angular/app
 //= require_tree ./angular/.
 //= require_self

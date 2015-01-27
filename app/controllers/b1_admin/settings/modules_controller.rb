@@ -2,9 +2,11 @@ module B1Admin
   module Settings
     class ModulesController < B1Admin::ApplicationController
       #before_filter :module_exists? ,only:[:update,:create]
-      #layout false
 
+      ##
       # Render view or return json of modules tree
+      # @render [JSON]
+      ##
       def index
         respond_to do |format|
           format.html do 
@@ -19,9 +21,50 @@ module B1Admin
         end
       end
 
+      ##
+      # Get module by id
+      # params:
+      #   id - Module id [Integer]
+      # @raise  [B1Admin::Exception] if module is not found
+      # @render [JSON<B1Admin::Module>]
+      ##
+      def show
+        raise B1Admin::Exception(7,{text:"Item B1Admin::Module with id #{params['id']} not found"}) unless mod = B1Admin::Module.find_by_id(params[:id].to_i)
+        render json: mod
+      end
+
+      ##
+      # Create new module
+      # @render [JSON]
+      ##
+      def create
+      	mod  = B1Admin::Module.new(mod_params)
+        response = success_update_response
+      	unless mod.valid? && mod.save
+          response = fail_update_response mod
+      	end
+        render json: response
+      end
+
+      ##
+      # Update one module, finded by id
+      # @raise  [B1Admin::Exception] if module is not found
+      # @render [JSON]
+      ##
+      def update
+        response = success_update_response
+        raise B1Admin::Exception(7,{text:"Item B1Admin::Module with id #{params['id']} not found"}) unless mod = B1Admin::Module.find_by_id(params[:id].to_i)
+        unless mod.update_attributes(mod_params)
+          fail_update_response
+        end
+        render json: response
+      end
+
+      ##
       # Update all modules positions or delete them
       # @raise [B1Admin::Exception] if params from JS are invalid or module is not found
-      # @retrun [JSON]
+      # @render [JSON]
+      ##
       def update_positions
         
         raise B1Admin::Exception(6,{name:update_all_params.inspect,type:"Array",is_type: update_all_params.class}) unless update_all_params.kind_of?(Array)
@@ -37,42 +80,24 @@ module B1Admin
             update_func.call(childs)
           end
         end
-        update_func.call(update_all_params)
-        B1Admin::Module.destroy_all(["id NOT IN (?)", existing_modules_ids])
-        render json: { success: true }
+        # Transaction used because update_func cay raise Exception
+        B1Admin::Module.transaction do 
+          update_func.call(update_all_params)
+        end
+        # Delete modules if user can do it
+        if current_admin.can?(:destroy,self.class.name)
+          B1Admin::Module.destroy_all(["id NOT IN (?)", existing_modules_ids])
+        end
+        render json: success_update_response
+
       end
 
-      def edit;  @module  = B1Admin::Module.find_by_id(params[:id]) end
-      def new;   @module  = B1Admin::Module.new end
-      def update
-      	@module = B1Admin::Module.includes(:permissions,:parent_module,:modules,:roles).find_by_id(params[:module].delete(:id))
-      	if @module.update_attributes(mod_params)
-      		flash[:success] = I18n.t("admin.settings.modules.updated")
-      		redirect_to settings_modules_path
-      	else
-      		flash[:errors]  = @module.errors.messages.each_pair.map{|k,v| v.map{|l|"#{t("admin.settings.modules.#{k}")} #{l}"}}.flatten
-      		render action: :new
-      	end
-      end
-      def create
-      	@module = B1Admin::Module.new(mod_params)
-      	if @module.valid?
-      		@module.save
-      		flash[:success] = I18n.t("admin.settings.modules.added")
-      		redirect_to settings_modules_path
-      	else
-      		flash[:errors]  = @module.errors.messages.each_pair.map{|k,v| v.map{|l|"#{t("admin.settings.modules.#{k}")} #{l}"}}.flatten
-      		render action: :new
-      	end
-      end
-      def destroy
-      	B1Admin::Module.find(params[:id]).destroy 
-      	flash[:success] = I18n.t("admin.settings.modules.deleted")
-      rescue ActiveRecord::DeleteRestrictionError
-      	flash[:errors]  = [I18n.t("admin.settings.modules.cannot_delete")]
-      ensure
-      	redirect_to settings_modules_path
-      end
+      ##
+      # Action only for permissions, modules destroys in "update_positions" action
+      ##
+      def destroy;end
+
+
       private
       # Not workink!!
       def module_exists?
@@ -82,7 +107,7 @@ module B1Admin
       	redirect_to request.referer
       end
       def mod_params
-        params.require(:item).permit(:name, :ico, :parent_id, :controller, :action,:id)
+        params.require(:item).permit(B1Admin::LANGS.map{|l| "name_#{l}"} + [:ico, :parent_id, :controller, :action,:id])
       end
 
       def update_all_params

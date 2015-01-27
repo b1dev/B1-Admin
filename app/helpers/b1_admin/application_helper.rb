@@ -15,5 +15,10 @@ module B1Admin
     def user_can? method_name
       true
     end
+
+    def parent_modules id
+      B1Admin::Module.where(parent_id:0).where.not(id:id)
+    end
+    
   end
 end

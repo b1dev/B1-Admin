@@ -9,6 +9,8 @@
     = javascript_include_tag "b1_admin/application"
     %base{href:"/#{namespace}"}
   %body
+    = render "shared/error_alert"
+    = render "shared/info_alert"
     #container.effect.mainnav-lg
       / NAVBAR
       / ===================================================
