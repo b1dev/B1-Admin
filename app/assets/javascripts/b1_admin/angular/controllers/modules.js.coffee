@@ -7,21 +7,20 @@ angular.module("B1Admin").controller "ModulesController", [
   "$http"
   "$anchorScroll"
   ($scope, $resource, $timeout, $element, $rootScope,$http,$anchorScroll) ->
-    
+
+    alertSelector = "#content-container"
     $scope.items = []
 
-    Module = $resource("#{$element.data("url")}/:id.json",{},{query: {isArray: false },update:{ method:'PUT' }})
+    Module = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
     
     loadModules = ->
       Module.query().$promise.then (data) ->
-        $scope.items = data.items
-        $scope.itemsClone = clone data.items
+        $scope.items = data
+        $scope.itemsClone = angular.copy($scope.items)
 
     setItem = (item) ->
       $scope.editedItem = item
-      $timeout (->
-        $('.selectpicker').selectpicker("refresh");
-      ), 100
+      $rootScope.updateSelect()
         
 
     getRootNodesScope = ->
@@ -32,17 +31,11 @@ angular.module("B1Admin").controller "ModulesController", [
         $scope.moduleForm.$setPristine();
         $scope.moduleForm.$setUntouched();
         setItem({})
-        $rootScope.info("#content-container",resp.msg)  
+        $rootScope.info(alertSelector,resp.msg)  
         loadModules()
       else
-        $rootScope.error("#content-container",resp.msg)
+        $rootScope.error(alertSelector,resp.msg)
       $anchorScroll()
-
-    $scope.remove = (scope) ->
-      scope.remove()
-
-    $scope.toggle = (scope) ->
-      scope.toggle()
 
     $scope.collapse = ->
       scope = getRootNodesScope()
@@ -53,25 +46,36 @@ angular.module("B1Admin").controller "ModulesController", [
       scope.expandAll()
 
     $scope.revert = ->
-      $scope.items = clone $scope.itemsClone
+      $scope.items = angular.copy($scope.itemsClone)
 
     $scope.updatePositions = ->
       $rootScope.showLoader()
       $http.post($element.data("updatePositionsUrl"), JSON.stringify(items:$scope.items)).success (resp) ->
-        $rootScope.info("#content-container",resp.msg)  if resp.success
-        $rootScope.error("#content-container",resp.msg) unless resp.success
+        $rootScope.info(alertSelector,resp.msg)  if resp.success
+        $rootScope.error(alertSelector,resp.msg) unless resp.success
         $anchorScroll()
         loadModules()
         setItem({})
       .error ->
-        $rootScope.error("#content-container",$rootScope.server_error)
+        $rootScope.error(alertSelector,$rootScope.server_error)
 
     $scope.edit = (scope)->
       Module.get {id:scope.$nodeScope.$modelValue.id}, (resp) ->
         setItem(resp)
       , ->
-        $rootScope.error("#content-container",$rootScope.server_error)
+        $rootScope.error(alertSelector,$rootScope.server_error)
 
+    $scope.destroy = (scope) ->
+      data =
+        id: scope.$nodeScope.$modelValue.id
+        title: "#{$element.data("deleteText")} - #{scope.$nodeScope.$modelValue.name}"
+      $rootScope.confirm(data).result.then ((result) ->
+        $rootScope.showLoader()
+        Module.delete {id:scope.$nodeScope.$modelValue.id}, (resp) ->
+          loadModules() if resp.success
+          $rootScope.info(alertSelector,resp.msg)
+          $anchorScroll()
+      )
   
     $scope.save = ->
       $scope.moduleForm.$setSubmitted()
@@ -81,12 +85,12 @@ angular.module("B1Admin").controller "ModulesController", [
           Module.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
             saveCallback(resp)
           , ->
-            $rootScope.error("#content-container",$rootScope.server_error)
+            $rootScope.error(alertSelector,$rootScope.server_error)
         else
           Module.save {item:$scope.editedItem}, (resp) ->
             saveCallback(resp)
           , ->
-            $rootScope.error("#content-container",$rootScope.server_error)
+            $rootScope.error(alertSelector,$rootScope.server_error)
 
 
     loadModules()

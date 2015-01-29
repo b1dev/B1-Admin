@@ -1,7 +1,7 @@
 #page-title
 	%h1.page-header.text-overflow
 		=t("b1_admin.modules")
-#page-content{:"ng-controller"=>"ModulesController",:"data-url"=>settings_modules_path, :"data-update-positions-url"=>settings_modules_update_positions_path}
+#page-content{:"ng-controller"=>"ModulesController",:"data-url"=>settings_modules_path, :"data-update-positions-url"=>settings_modules_update_positions_path,:"data-delete-text"=>t("b1_admin.delete_modules_confirm")}
 	.row
 		.col-md-6
 			%script{:id => "items_renderer.html", :type => "text/ng-template"}
@@ -23,7 +23,7 @@
 										%i.nodrag{"ng-class" => "{'fa fa-angle-double-right': collapsed, 'fa fa-angle-double-down': !collapsed}"}
 									{{item.name}}
 									- if user_can?(:destroy)
-										%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "remove(this)"}
+										%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "destroy(this)"}
 											%i.fa.fa-minus-circle{"data-nodrag" => true}
 									- if user_can?(:edit)
 										%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
@@ -33,7 +33,7 @@
 										%div{"ui-tree-handle" => ""}
 											{{item.name}}
 											- if user_can?(:destroy)
-												%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "remove(this)"}
+												%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "destroy(this)"}
 													%i.fa.fa-minus-circle{"data-nodrag" => true}
 											- if user_can?(:edit)
 												%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
@@ -55,7 +55,7 @@
 						.form-group{"ng-class" => "{'has-error': moduleForm.parent_id.$invalid && moduleForm.$submitted}"}
 							= label_tag :parent_id, t("b1_admin.parent_controller"), class:"col-sm-3 control-label"
 							.col-sm-9
-								=select_tag :parent_id,options_for_select([[t("b1_admin.is_parent"),0]] + parent_modules(@module.id).map{|d|[d.name,d.id]},@module.parent_id),class:"selectpicker",required: true, "ng-model"=>"editedItem.parent_id"
+								=select_tag :parent_id,options_for_select([[t("b1_admin.is_parent"),0]] + parent_modules(0).map{|d|[d.name,d.id]},0),class:"selectpicker",required: true, "ng-model"=>"editedItem.parent_id"
 						- B1Admin::LANGS.each do |l|
 							.form-group{"ng-class" => "{'has-error': moduleForm.name_#{l}.$invalid && moduleForm.$submitted}"}
 								= label_tag :"name_#{l}", "#{t("b1_admin.title")} #{l.upcase}", class:"col-sm-3 control-label"

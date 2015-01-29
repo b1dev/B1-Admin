@@ -1,0 +1,7 @@
+%script{id: "confirmModal.html", type: "text/ng-template"}
+  .modal-body
+    %button.bootbox-close-button.close{"ng-click" => "cancel()", :style => "margin-top: -10px;"} ×
+    .bootbox-body {{title}}
+  .modal-footer
+    %button.btn.btn-default{"ng-click" => "cancel()"}=t("b1_admin.cancel")
+    %button.btn.btn-primary{"ng-click" => "confirm()"}=t("b1_admin.OK")

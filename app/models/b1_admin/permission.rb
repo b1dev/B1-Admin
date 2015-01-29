@@ -11,5 +11,18 @@ module B1Admin
   	end
     validates :action,     length: { in: 4..20},format: {with:/\A^[^`!@#\$%\^&*+=]+\z/i}, presence: true
     #End validates
+
+    def desc
+      read_attribute "desc_#{I18n.locale}"
+    end
+
+    # Perform hash of desc by current locale and action of permission
+    # @return [Hash] performed item
+    def to_item
+      {
+        desc: self.desc,
+        id:   self.id,
+      }
+    end
   end
 end

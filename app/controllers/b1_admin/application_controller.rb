@@ -48,6 +48,12 @@ module B1Admin
     def success_update_response
       {success:true,msg:I18n.t("b1_admin.success_saved")}
     end
+
+    def success_delete_response
+      {success:true,msg:I18n.t("b1_admin.success_destroy")}
+    end
+
+
     def fail_update_response model
       if model.is_a?(ActiveRecord::Base)
         {success:false,msg: model.errors.messages.each_pair.map{|k,v| v.map{|l| "{#k} #{l}"}}.flatten}
