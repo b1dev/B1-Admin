@@ -24,7 +24,6 @@ module B1Admin
       # Get module by id
       # params:
       #   id - Module id [Integer]
-      # @raise  [B1Admin::Exception] if module is not found
       # @render [JSON<B1Admin::Module>]
       ##
       def show
@@ -33,7 +32,6 @@ module B1Admin
 
       ##
       # Update one module, finded by id
-      # @raise  [B1Admin::Exception] if module is not found
       # @render [JSON]
       ##
       def update
@@ -61,7 +59,6 @@ module B1Admin
       # Destroy module by id
       # params:
       #   id - Module id [Integer]
-      # @raise  [B1Admin::Exception] if module is not found
       # @render [JSON]
       ##
       def destroy
@@ -115,6 +112,7 @@ module B1Admin
 
       ##
       # Set instance @item by id from params or raise exception
+      # @raise  [B1Admin::Exception] if module is not found
       ##
       def check_item
         raise B1Admin::Exception.new(7,{text:"Item B1Admin::Module with id #{params['id']} not found"}) unless @item = B1Admin::Module.find_by_id(params[:id].to_i)

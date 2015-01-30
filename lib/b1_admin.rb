@@ -8,6 +8,8 @@ require "active_attr"
 require "angularjs-rails"
 require "angular-ui-bootstrap-rails"
 require "signinable"
-
+require "will_paginate"
+#require "active_model_serializers"
 module B1Admin
+  WillPaginate.per_page = 1
 end

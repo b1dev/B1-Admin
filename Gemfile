@@ -22,6 +22,8 @@ gem "bcrypt"
 gem "actionpack-page_caching"
 gem "actionpack-action_caching"
 gem 'angular-ui-bootstrap-rails'
+gem 'will_paginate', '~> 3.0.6'
+gem 'active_model_serializers'
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

@@ -1,5 +1,15 @@
 en:
   b1_admin:
+    choose_modules_and_permissions: "Укажите к каким модулям имеет доступ роль,и какие права доступа в нем ей доступны"
+    uncheck_all: "Отключить все"
+    check_all: "Включить все"
+    desc: "Описание"
+    role_manage: "Создание/редактирование роли доступа"
+    back_to_list: "Вернуться к списку"
+    roles_list: "Список ролей доступа"
+    info: "Инфо"
+    user_actions: "Действия"
+    roles: "Роли Доступа"
     success_destroy: "Запись успешно удалена, со всеми связаніми записями"
     delete_permission_confirm:  "Вы уверены что хотите удалить право доступа "
     delete_modules_confirm: "Вы уверены что хотите модуль "

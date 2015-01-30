@@ -9,6 +9,8 @@
 //= require ./vendor/angular-ui-tree
 //= require ./vendor/bootstrap.min
 //= require ./vendor/plugins.min
+//= require ./vendor/ng-table
+
 //= require ./angular/app
 //= require_tree ./angular/.
 //= require_self

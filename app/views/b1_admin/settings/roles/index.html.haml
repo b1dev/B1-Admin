@@ -1,0 +1,23 @@
+#page-title
+  %h1.page-header.text-overflow
+    =t("b1_admin.roles")
+#page-content{:"ng-controller"=>"RolesController",:"data-url"=>settings_roles_path,:"data-actions-url"=>settings_permissions_actions_path,:"data-delete-text"=>t("b1_admin.delete_permission_confirm")}    
+  .row
+    .panel
+      .panel-heading
+        .panel-control
+          %a.btn.btn-primary{href:new_settings_role_path,"ng-click"=>"$root.setRoute('#{new_settings_role_path}')"}=t("b1_admin.add")
+        %h3.panel-title=t("b1_admin.roles_list")
+
+      .panel-body
+        %table.table.table-striped{"ng-table"=>"itemsTable"}
+          %tr{"ng-repeat" => "item in $data"}
+            %td{style:"text-align: center;", "data-title" => "'#{t('b1_admin.title')}'"}
+              {{item.name}}
+            %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.info')}'"}
+              %a.fa.fa-question{href:"#"}
+            %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.user_actions')}'"}
+              {{item.id}}
+
+
+

@@ -140,7 +140,7 @@
                               - mod.child_modules.each do |m|
                                 - if current_admin.can_access_to_module?(m)
                                   %li
-                                    =link_to m.name , send("#{mod.controller}_#{m.controller}_path") ,:"ng-click"=>"setRoute('#{send("#{mod.controller}_#{m.controller}_path")}')" 
+                                    =link_to m.name , send("#{mod.controller}_#{m.controller}_path") ,:"ng-click"=>"$root.setRoute('#{send("#{mod.controller}_#{m.controller}_path")}')" 
                   / Widget
                   / ================================
                   .mainnav-widget

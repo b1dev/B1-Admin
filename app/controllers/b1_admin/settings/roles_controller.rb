@@ -1,6 +1,6 @@
 module B1Admin
   module Settings
-    class PermissionsController < B1Admin::ApplicationController
+    class RolesController < B1Admin::ApplicationController
       before_filter :check_item, only:[:show,:update,:destroy]
 
       ##
@@ -13,16 +13,25 @@ module B1Admin
             render layout: !params.has_key?(:only_template)
           end
           format.json do
-            items = B1Admin::Module.to_permission_tree
-            render json: items
+            items = B1Admin::Role.page(params[:page])
+            total = B1Admin::Role.count
+            render json: {items:items,total:total}
           end
         end
       end
 
       ##
-      # Get rermission by id
+      # Render a view
+      ##
+      def new
+        @modules = B1Admin::Module.to_permission_tree
+        render layout: !params.has_key?(:only_template)
+      end
+
+      ##
+      # Get role by id
       # params:
-      #   id - Permission id [Integer]
+      #   id - Role id [Integer]
       # @render [JSON<B1Admin::Module>]
       ##
       def show
@@ -30,7 +39,7 @@ module B1Admin
       end
 
       ##
-      # Update one permission, finded by id
+      # Update one role, finded by id
       # @render [JSON]
       ##
       def update
@@ -42,11 +51,11 @@ module B1Admin
       end
 
       ##
-      # Create new permission
+      # Create new role
       # @render [JSON]
       ##
       def create
-        item  = B1Admin::Permission.new(allowed_params)
+        item  = B1Admin::Role.new(allowed_params)
         response = success_update_response
         unless item.valid? && item.save
           response = fail_update_response item
@@ -55,7 +64,7 @@ module B1Admin
       end
 
       ##
-      # Destroy permission by id
+      # Destroy role by id
       # params:
       #   id - Permission id [Integer]
       # @render [JSON]
@@ -64,24 +73,12 @@ module B1Admin
         render json: @item.destroy ? success_delete_response : {success: false}
       end
 
-      ##
-      # Get module actions
-      # params:
-      #   id - Module id [Integer]
-      # @raise  [B1Admin::Exception] if module is not found
-      # @render [JSON<Array[String]>]
-      ##
-      def actions
-        raise B1Admin::Exception.new(7,{text:"Item B1Admin::Module with id #{params['id']} not found"}) unless item = B1Admin::Module.find_by_id(params[:id].to_i)
-        render json: {success: true, actions: item.get_controller_actions}
-      end
-
 
 
       private
       
       def allowed_params
-        params.require(:item).permit(B1Admin::LANGS.map{|l| "desc_#{l}"} + [:action,:id,:module_id])
+        params.require(:item).permit(B1Admin::LANGS.map{|l| "name_#{l}"} + [:action,:id,:module_id])
       end
 
       ##
@@ -89,7 +86,7 @@ module B1Admin
       # @raise  [B1Admin::Exception] if permission is not found
       ##
       def check_item
-        raise B1Admin::Exception.new(7,{text:"Item B1Admin::Permission with id #{params['id']} not found"}) unless @item = B1Admin::Permission.find_by_id(params[:id].to_i)
+        raise B1Admin::Exception.new(7,{text:"Item B1Admin::Role with id #{params['id']} not found"}) unless @item = B1Admin::Role.find_by_id(params[:id].to_i)
       end
 
     end

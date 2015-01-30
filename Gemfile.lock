@@ -10,6 +10,7 @@ PATH
       paperclip
       rails (~> 4.1.8)
       signinable
+      will_paginate (~> 3.0.6)
 
 GEM
   remote: https://rubygems.org/
@@ -34,6 +35,8 @@ GEM
     active_attr (0.8.5)
       activemodel (>= 3.0.2, < 5.0)
       activesupport (>= 3.0.2, < 5.0)
+    active_model_serializers (0.9.3)
+      activemodel (>= 3.2)
     activemodel (4.1.9)
       activesupport (= 4.1.9)
       builder (~> 3.1)
@@ -144,6 +147,7 @@ GEM
     tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    will_paginate (3.0.7)
 
 PLATFORMS
   ruby
@@ -152,6 +156,7 @@ DEPENDENCIES
   actionpack-action_caching
   actionpack-page_caching
   active_attr
+  active_model_serializers
   angular-ui-bootstrap-rails
   angularjs-rails
   b1_admin!
@@ -162,3 +167,4 @@ DEPENDENCIES
   rspec-rails
   signinable
   sqlite3
+  will_paginate (~> 3.0.6)
