@@ -1,4 +1,4 @@
-app = angular.module("B1Admin", ["ngRoute","ngResource","ui.tree",'ui.bootstrap','ngTable'])
+app = angular.module("B1Admin", ["ngRoute","ngResource","ui.tree",'ui.bootstrap','ngTable',"NgSwitchery"])
 
 app.run [
     "$location"

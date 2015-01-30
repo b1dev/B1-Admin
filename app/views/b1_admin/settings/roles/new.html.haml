@@ -12,7 +12,7 @@
         .panel-body
           .row
             .col
-              .form-group{"ng-class" => "{'has-error': itemForm.controller.$invalid && itemForm.$submitted}"}
+              .form-group{"ng-class" => "{'has-error': itemForm.name.$invalid && itemForm.$submitted}"}
                 = label_tag :name, t("b1_admin.title"), class:"col-sm-1 control-label"
                 .col-sm-11
                   = text_field_tag :name,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.name"
@@ -23,7 +23,7 @@
                     = text_field_tag :"desc_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.desc_#{l}"
             %hr
             .col
-              %p{style:"text-align:center"}=t("b1_admin.choose_modules_and_permissions")
+              %h5{style:"text-align:center"}=t("b1_admin.choose_modules_and_permissions")
             .col
               #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
                 - @modules.each do |mod|
@@ -52,7 +52,7 @@
                                       %li
                                         %label=perm[:desc]
                                         .pull-right
-                                          %input{"data-switchery" => "true", type: "checkbox",id:"perm_#{perm[:id]}"}
+                                          %input.js-switch{"ui-switch" => "true", type: "checkbox",id:"perm_#{perm[:id]}", "ng-model"=>"editedItem.permissions[#{perm[:id]}]"}
 
         - if user_can?(:create) || user_can?(:update)
           .panel-footer.text-right

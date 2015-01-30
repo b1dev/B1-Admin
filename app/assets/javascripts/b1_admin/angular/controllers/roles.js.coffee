@@ -6,8 +6,10 @@ angular.module("B1Admin").controller "RolesController", [
   "Config"
   ($scope,ngTableParams,$resource,$element,Config) ->
 
+    alertSelector = "#content-container"
+
     Role = $resource("#{$element.data("url")}/:id.json",{},{query:{isArray:false},update:{ method:'PUT' }})
-    $scope.params = new ngTableParams()
+
     Role.query().$promise.then (data) ->
       $scope.itemsTable = new ngTableParams(
         page: 1 
@@ -17,24 +19,29 @@ angular.module("B1Admin").controller "RolesController", [
         counts: []
         getData: ($defer, params) ->
           params.total(data.total)
-          #$defer.resolve(data.items.slice((params.page() - 1) * params.count(), params.page() * params.count()));
           $defer.resolve(data.items.slice((params.page() - 1) * params.count(), params.page() * params.count()))
 
       )
 
-    # $scope.itemsTable = new ngTableParams(
-    #   page: 1 # show first page
-    #   count: 25 # count per page
-    # ,
-    #   getData: ($defer, params) ->
-    #     data = Role.query(
-    #       limit: params.count()
-    #       offset: (params.page() - 1) * params.count()
-    #       order: params.sorting()
-    #     ).$promise.then (data) ->
-    #       params.total(data.total)
-    #       $defer.resolve data.items.slice((params.page() - 1) * params.count(), params.page() * params.count())
-    #       console.log($defer)
+    setItem = (item) ->
+      $scope.editedItem = item
 
-    # )
+    $scope.save = ->
+      console.log(Object.keys($scope.editedItem.permissions))
+      $scope.itemForm.$setSubmitted()
+      if $scope.itemForm.$valid
+        $rootScope.showLoader()
+        if $scope.editedItem.id
+          Role.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
+            saveCallback(resp)
+          , ->
+            $rootScope.error(alertSelector,$rootScope.server_error)
+        else
+          Role.save {item:$scope.editedItem}, (resp) ->
+            saveCallback(resp)
+          , ->
+            $rootScope.error(alertSelector,$rootScope.server_error)
+
+
+    setItem({permissions:[]})
 ]
