@@ -11,10 +11,10 @@ angular.module("B1Admin").controller "PermissionsController", [
     alertSelector = "#content-container"
     $scope.items   = []
     $scope.modules = []
-    Permission = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
+    Item = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
     
-    loadModules = ->
-      Permission.query().$promise.then (data) ->
+    loadItems = ->
+      Item.query().$promise.then (data) ->
         $scope.items = data
         modules = []
         angular.forEach data, ((item, key) ->
@@ -49,10 +49,10 @@ angular.module("B1Admin").controller "PermissionsController", [
 
     saveCallback = (resp) ->
       if resp.success
-        $scope.permissionForm.$setPristine();
-        $scope.permissionForm.$setUntouched();
+        $scope.itemForm.$setPristine();
+        $scope.itemForm.$setUntouched();
         setItem({}) 
-        loadModules()
+        loadItems()
         setActions([])
         $rootScope.info(alertSelector,resp.msg)
       else
@@ -65,8 +65,8 @@ angular.module("B1Admin").controller "PermissionsController", [
         title: "#{$element.data("deleteText")} - #{scope.$nodeScope.$modelValue.desc}"
       $rootScope.confirm(data).result.then ((result) ->
         $rootScope.showLoader()
-        Permission.delete {id:scope.$nodeScope.$modelValue.id}, (resp) ->
-          loadModules() if resp.success
+        Item.delete {id:scope.$nodeScope.$modelValue.id}, (resp) ->
+          loadItems() if resp.success
           $rootScope.info(alertSelector,resp.msg)
           $anchorScroll()
       )
@@ -80,23 +80,23 @@ angular.module("B1Admin").controller "PermissionsController", [
       scope.expandAll()
 
     $scope.edit = (scope)->
-      Permission.get {id:scope.$nodeScope.$modelValue.id}, (resp) ->
+      Item.get {id:scope.$nodeScope.$modelValue.id}, (resp) ->
         setItem(resp)
       , ->
         $rootScope.error(alertSelector,$rootScope.server_error)
 
   
     $scope.save = ->
-      $scope.permissionForm.$setSubmitted()
-      if $scope.permissionForm.$valid
+      $scope.itemForm.$setSubmitted()
+      if $scope.itemForm.$valid
         $rootScope.showLoader()
         if $scope.editedItem.id
-          Permission.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
+          Item.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
             saveCallback(resp)
           , ->
             $rootScope.error(alertSelector,$rootScope.server_error)
         else
-          Permission.save {item:$scope.editedItem}, (resp) ->
+          Item.save {item:$scope.editedItem}, (resp) ->
             saveCallback(resp)
           , ->
             $rootScope.error(alertSelector,$rootScope.server_error)
@@ -106,6 +106,6 @@ angular.module("B1Admin").controller "PermissionsController", [
 
 
     setActions([])
-    loadModules()
+    loadItems()
     setItem({module_id:3})
 ]

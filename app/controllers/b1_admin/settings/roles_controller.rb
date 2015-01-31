@@ -1,7 +1,7 @@
 module B1Admin
   module Settings
     class RolesController < B1Admin::ApplicationController
-      before_filter :check_item, only:[:show,:update,:destroy]
+      before_filter :check_item, only:[:show,:update,:destroy,:edit]
 
       ##
       # Render view or return json of modules-permissions tree
@@ -25,6 +25,7 @@ module B1Admin
       ##
       def new
         @modules = B1Admin::Module.to_permission_tree
+        @item = Role.new
         render layout: !params.has_key?(:only_template)
       end
 
@@ -36,6 +37,12 @@ module B1Admin
       ##
       def show
         render json: @item
+      end
+
+
+      def edit
+        @modules = B1Admin::Module.to_permission_tree
+        render layout: !params.has_key?(:only_template)
       end
 
       ##
@@ -78,7 +85,7 @@ module B1Admin
       private
       
       def allowed_params
-        params.require(:item).permit(B1Admin::LANGS.map{|l| "name_#{l}"} + [:action,:id,:module_id])
+        params.require(:item).permit(B1Admin::LANGS.map{|l| "desc_#{l}"} + [{module_ids: []},{permission_ids: []},:name])
       end
 
       ##

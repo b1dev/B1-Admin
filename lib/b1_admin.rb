@@ -11,5 +11,5 @@ require "signinable"
 require "will_paginate"
 #require "active_model_serializers"
 module B1Admin
-  WillPaginate.per_page = 1
+  WillPaginate.per_page = 25
 end

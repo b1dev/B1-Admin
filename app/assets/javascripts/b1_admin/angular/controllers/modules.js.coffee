@@ -11,10 +11,10 @@ angular.module("B1Admin").controller "ModulesController", [
     alertSelector = "#content-container"
     $scope.items = []
 
-    Module = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
+    Item = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
     
-    loadModules = ->
-      Module.query().$promise.then (data) ->
+    loadItems = ->
+      Item.query().$promise.then (data) ->
         $scope.items = data
         $scope.itemsClone = angular.copy($scope.items)
 
@@ -28,11 +28,11 @@ angular.module("B1Admin").controller "ModulesController", [
 
     saveCallback = (resp) ->
       if resp.success
-        $scope.moduleForm.$setPristine();
-        $scope.moduleForm.$setUntouched();
+        $scope.itemForm.$setPristine();
+        $scope.itemForm.$setUntouched();
         setItem({})
         $rootScope.info(alertSelector,resp.msg)  
-        loadModules()
+        loadItems()
       else
         $rootScope.error(alertSelector,resp.msg)
       $anchorScroll()
@@ -54,13 +54,13 @@ angular.module("B1Admin").controller "ModulesController", [
         $rootScope.info(alertSelector,resp.msg)  if resp.success
         $rootScope.error(alertSelector,resp.msg) unless resp.success
         $anchorScroll()
-        loadModules()
+        loadItems()
         setItem({})
       .error ->
         $rootScope.error(alertSelector,$rootScope.server_error)
 
     $scope.edit = (scope)->
-      Module.get {id:scope.$nodeScope.$modelValue.id}, (resp) ->
+      Item.get {id:scope.$nodeScope.$modelValue.id}, (resp) ->
         setItem(resp)
       , ->
         $rootScope.error(alertSelector,$rootScope.server_error)
@@ -71,28 +71,28 @@ angular.module("B1Admin").controller "ModulesController", [
         title: "#{$element.data("deleteText")} - #{scope.$nodeScope.$modelValue.name}"
       $rootScope.confirm(data).result.then ((result) ->
         $rootScope.showLoader()
-        Module.delete {id:scope.$nodeScope.$modelValue.id}, (resp) ->
-          loadModules() if resp.success
+        Item.delete {id:scope.$nodeScope.$modelValue.id}, (resp) ->
+          loadItems() if resp.success
           $rootScope.info(alertSelector,resp.msg)
           $anchorScroll()
       )
   
     $scope.save = ->
-      $scope.moduleForm.$setSubmitted()
-      if $scope.moduleForm.$valid
+      $scope.itemForm.$setSubmitted()
+      if $scope.itemForm.$valid
         $rootScope.showLoader()
         if $scope.editedItem.id
-          Module.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
+          Item.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
             saveCallback(resp)
           , ->
             $rootScope.error(alertSelector,$rootScope.server_error)
         else
-          Module.save {item:$scope.editedItem}, (resp) ->
+          Item.save {item:$scope.editedItem}, (resp) ->
             saveCallback(resp)
           , ->
             $rootScope.error(alertSelector,$rootScope.server_error)
 
 
-    loadModules()
+    loadItems()
     setItem({})
 ]

@@ -40,22 +40,22 @@
 			.panel
 				.panel-heading
 					%h3.panel-title#new_text=t("b1_admin.new_module")
-				= form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :moduleForm do 
+				= form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :itemForm do 
 					.panel-body
-						.form-group{"ng-class" => "{'has-error': moduleForm.controller.$invalid && moduleForm.$submitted}"}
+						.form-group{"ng-class" => "{'has-error': itemForm.controller.$invalid && itemForm.$submitted}"}
 							= label_tag :controller, t("b1_admin.controller"), class:"col-sm-3 control-label"
 							.col-sm-9
 								= text_field_tag :controller,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.controller"
-						.form-group{"ng-class" => "{'has-error': moduleForm.ico.$invalid && moduleForm.$submitted}"}
+						.form-group{"ng-class" => "{'has-error': itemForm.ico.$invalid && itemForm.$submitted}"}
 							= label_tag :ico, t("b1_admin.ico"), class:"col-sm-3 control-label"
 							.col-sm-9
 								= text_field_tag :ico,"" , class:"form-control",required: true,"ng-minlength"=>3 , "ng-model"=>"editedItem.ico"
-						.form-group{"ng-class" => "{'has-error': moduleForm.parent_id.$invalid && moduleForm.$submitted}"}
+						.form-group{"ng-class" => "{'has-error': itemForm.parent_id.$invalid && itemForm.$submitted}"}
 							= label_tag :parent_id, t("b1_admin.parent_controller"), class:"col-sm-3 control-label"
 							.col-sm-9
 								=select_tag :parent_id,options_for_select([[t("b1_admin.is_parent"),0]] + parent_modules(0).map{|d|[d.name,d.id]},0),class:"selectpicker",required: true, "ng-model"=>"editedItem.parent_id"
 						- B1Admin::LANGS.each do |l|
-							.form-group{"ng-class" => "{'has-error': moduleForm.name_#{l}.$invalid && moduleForm.$submitted}"}
+							.form-group{"ng-class" => "{'has-error': itemForm.name_#{l}.$invalid && itemForm.$submitted}"}
 								= label_tag :"name_#{l}", "#{t("b1_admin.title")} #{l.upcase}", class:"col-sm-3 control-label"
 								.col-sm-9
 									= text_field_tag :"name_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.name_#{l}"

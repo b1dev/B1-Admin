@@ -61,8 +61,16 @@ angular.module('NgSwitchery', [])
                         ngModel.$setViewValue(element.checked);
                     })
                 })
+              scope.$watch(
+                  function(){
+                      return ngModel.$modelValue;
+                  }, function(newValue, oldValue){
+                      switcher.setPosition()
+                  }, true);
               }, 0);
             }
+
+
             initializeSwitch();
           }
 
