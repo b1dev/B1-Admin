@@ -86,7 +86,7 @@
               %li#dropdown-user.dropdown
                 %a.dropdown-toggle.text-right{"data-toggle" => "dropdown", :href => "#"}
                   %span.pull-right
-                    = image_tag current_admin.avatar, class: "img-circle img-user media-object"
+                    %img.img-circle.img-user.media-object{src:current_admin.avatar}
                   .username.hidden-xs=current_admin.name
                 .dropdown-menu.dropdown-menu-md.dropdown-menu-right.with-arrow.panel-default
                   / User dropdown menu

@@ -17,10 +17,8 @@ angular.module("B1Admin").controller "RolesController", [
         page: 1 
         count: Config.perPage
         total: 0
-        data: Item.query().$promise.then (data) -> data.items
       ,
         counts: []
-        data: Item.query().$promise.then (data) -> data.items
         getData: ($defer, params) ->
           Item.query().$promise.then (data) ->
             params.total(data.total)

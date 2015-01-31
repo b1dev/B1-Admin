@@ -11,11 +11,11 @@ angular.module("B1Admin").controller "ModulesController", [
     alertSelector = "#content-container"
     $scope.items = []
 
-    Item = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
+    Item = $resource("#{$element.data("url")}/:id.json",{},{query:{isArray:false},update:{ method:'PUT' }})
     
     loadItems = ->
       Item.query().$promise.then (data) ->
-        $scope.items = data
+        $scope.items = data.items
         $scope.itemsClone = angular.copy($scope.items)
 
     setItem = (item) ->

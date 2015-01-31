@@ -14,7 +14,7 @@ module B1Admin
           end
           format.json do
             items = B1Admin::Module.to_permission_tree
-            render json: items
+            render json: {items:items}
           end
         end
       end

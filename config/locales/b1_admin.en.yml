@@ -1,5 +1,15 @@
 en:
   b1_admin:
+    _true: "Да"
+    _false: "Нет"
+    created_at: "Дата создания"
+    active: "Активен?"
+    blocked: "Заблокирован?"
+    email: "Email"
+    phone: "Телефон"
+    position: "Позиция"
+    admins: "Администраторы"
+    admins_list: "Список администраторов"
     delete: "Удалить"
     edit: "Редактировать"
     choose_modules_and_permissions: "Укажите к каким модулям имеет доступ роль,и какие права доступа в нем ей доступны"
@@ -16,6 +26,7 @@ en:
     delete_permission_confirm:  "Вы уверены что хотите удалить право доступа "
     delete_role_confirm: "Вы уверены что хотите Роль доступа "
     delete_modules_confirm: "Вы уверены что хотите модуль "
+    delete_admins_confirm: "Вы уверены что хотите администратора "
     OK: "OK"
     cancel: "Отмена"
     module: "Модуль"

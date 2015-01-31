@@ -20,7 +20,7 @@ module B1Admin
     #End Relations
 
 
-    has_attached_file :avatar, styles: { medium: "300x300>",thumb: "100x100>" }, default_url: "b1_admin/avatar-missing.png"
+    has_attached_file :avatar, styles: { medium: "300x300>",thumb: "100x100>" }, default_url: "/assets/b1_admin/avatar-missing.png"
     
     # Check if current user has access to requested action
 		# @param  [String] Requested class
@@ -99,8 +99,8 @@ module B1Admin
     # Return all availible for user parent modules and their childs
 		# @retrun [Array<B1Admin::Module>]
     def all_user_modules
-      Rails.cache.fetch "#{self.id}_all_modules" do 
-        @all_user_modules ||= self.roles.map(&:modules).flatten
+      Rails.cache.fetch "#{self.id}_all_modules_" do 
+        @all_user_modules ||= self.roles.map(&:modules).flatten.uniq
       end
     end
   end

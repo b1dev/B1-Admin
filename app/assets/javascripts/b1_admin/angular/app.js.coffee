@@ -65,3 +65,9 @@ app.run [
   ]
 app.factory "Config", ->
   perPage: 25
+
+app.filter 'isempty', ->
+  (input, replaceText) ->
+    if input
+      return input
+    replaceText

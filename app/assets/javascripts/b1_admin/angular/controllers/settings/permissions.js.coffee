@@ -11,13 +11,13 @@ angular.module("B1Admin").controller "PermissionsController", [
     alertSelector = "#content-container"
     $scope.items   = []
     $scope.modules = []
-    Item = $resource("#{$element.data("url")}/:id.json",{},{update:{ method:'PUT' }})
+    Item = $resource("#{$element.data("url")}/:id.json",{},{query:{isArray:false},update:{ method:'PUT' }})
     
     loadItems = ->
       Item.query().$promise.then (data) ->
-        $scope.items = data
+        $scope.items = data.items
         modules = []
-        angular.forEach data, ((item, key) ->
+        angular.forEach data.items, ((item, key) ->
           items = []
           angular.forEach item.childs, ((mod) ->
             @push {name:item.name + ": " + mod.name,id:mod.id}
