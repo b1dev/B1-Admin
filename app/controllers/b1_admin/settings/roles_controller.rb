@@ -15,7 +15,7 @@ module B1Admin
           format.json do
             items = B1Admin::Role.page(params[:page])
             total = B1Admin::Role.count
-            render json: {items:items,total:total}
+            render json: {items:ActiveModel::ArraySerializer.new(items, each_serializer: B1Admin::Roles::ListSerializer) ,total:total}
           end
         end
       end
@@ -25,7 +25,7 @@ module B1Admin
       ##
       def new
         @modules = B1Admin::Module.to_permission_tree
-        @item = Role.new
+        @item = B1Admin::Roles::ItemSerializer.new(B1Admin::Role.new).serializable_hash
         render layout: !params.has_key?(:only_template)
       end
 
@@ -42,6 +42,7 @@ module B1Admin
 
       def edit
         @modules = B1Admin::Module.to_permission_tree
+        @item = B1Admin::Roles::ItemSerializer.new(@item).serializable_hash
         render layout: !params.has_key?(:only_template)
       end
 
@@ -51,8 +52,13 @@ module B1Admin
       ##
       def update
         response = success_update_response
-        unless @item.update_attributes(allowed_params)
-          response = fail_update_response @item
+        ActiveRecord::Base.transaction do
+          @item.modules = []
+          @item.permissions = []
+          @item.save
+          unless @item.update_attributes(allowed_params)
+            response = fail_update_response @item
+          end
         end
         render json: response
       end

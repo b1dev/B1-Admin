@@ -6,28 +6,33 @@ angular.module("B1Admin").controller "RolesController", [
   "Config"
   "$rootScope"
   "$anchorScroll"
-  ($scope,ngTableParams,$resource,$element,Config,$rootScope,$anchorScroll) ->
+  "$timeout"
+  ($scope,ngTableParams,$resource,$element,Config,$rootScope,$anchorScroll,$timeout) ->
 
     alertSelector = "#content-container"
 
     Item = $resource("#{$element.data("url")}/:id.json",{},{query:{isArray:false},update:{ method:'PUT' }})
     if angular.element("#itemsTable").length
-      console.log(angular.element("#itemsTable").length)
-      Item.query().$promise.then (data) ->
-        $scope.itemsTable = new ngTableParams(
-          page: 1 
-          count: Config.perPage
-          total: 0
-        ,
-          counts: []
-          getData: ($defer, params) ->
+      $scope.itemsTable = new ngTableParams(
+        page: 1 
+        count: Config.perPage
+        total: 0
+        data: Item.query().$promise.then (data) -> data.items
+      ,
+        counts: []
+        data: Item.query().$promise.then (data) -> data.items
+        getData: ($defer, params) ->
+          Item.query().$promise.then (data) ->
             params.total(data.total)
-            $defer.resolve(data.items.slice((params.page() - 1) * params.count(), params.page() * params.count()))
+            $scope.data = data.items.slice((params.page() - 1) * params.count())
 
-        )
+      )
 
     setItem = (item) ->
       $scope.editedItem = item
+
+    loadItems = ->
+      $scope.itemsTable.reload()
 
     setChecked = (modId,type) ->
       type = type or false
@@ -41,12 +46,13 @@ angular.module("B1Admin").controller "RolesController", [
         )
       )
 
-    saveCallback = (resp) ->
+    saveCallback = (resp,clear) ->
       if resp.success
-        $scope.itemForm.$setPristine();
-        $scope.itemForm.$setUntouched();
-        setItem({}) 
+        $scope.itemForm.$setPristine() unless clear
+        $scope.itemForm.$setUntouched() unless clear
+        setItem({}) unless clear
         $rootScope.info(alertSelector,resp.msg)
+        $rootScope.setRoute($element.data("url"))
       else
         $rootScope.error(alertSelector,resp.msg)
       $anchorScroll()
@@ -62,14 +68,29 @@ angular.module("B1Admin").controller "RolesController", [
       , ->
         $rootScope.error(alertSelector,$rootScope.server_error)
 
+    $scope.destroy = (item) ->
+      data =
+        id: item.id
+        title: "#{$element.data("deleteText")} - #{item.desc}"
+      $rootScope.confirm(data).result.then ((result) ->
+        $rootScope.showLoader()
+        Item.delete {id:item.id}, (resp) ->
+          loadItems() if resp.success
+          $rootScope.info(alertSelector,resp.msg)
+          $anchorScroll()
+      )
 
     $scope.save = ->
       modules = []
       permissions = []
+      _permissions = []
+      angular.forEach Object.keys($scope.editedItem.permissions), ((id) ->
+        _permissions.push(id) if $scope.editedItem.permissions[id]
+      )
       angular.forEach $scope.modules, ((parentMod) ->
         angular.forEach parentMod.childs, ((mod) ->
           angular.forEach mod.permissions, ((perm) ->
-            if Object.keys($scope.editedItem.permissions).indexOf(String(perm.id)) >= 0
+            if _permissions.indexOf(String(perm.id)) >= 0
               modules.push(parentMod.id)
               modules.push(mod.id)
               permissions.push(perm.id)
@@ -83,7 +104,7 @@ angular.module("B1Admin").controller "RolesController", [
         $rootScope.showLoader()
         if $scope.editedItem.id
           Item.update {id:$scope.editedItem.id},{item:$scope.editedItem}, (resp) ->
-            saveCallback(resp)
+            saveCallback(resp,true)
           , ->
             $rootScope.error(alertSelector,$rootScope.server_error)
         else

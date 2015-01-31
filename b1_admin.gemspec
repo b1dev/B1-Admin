@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency "active_attr"
   s.add_dependency "bcrypt"
   s.add_dependency "will_paginate", '~> 3.0.6'
-
+  s.add_dependency "active_model_serializers"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

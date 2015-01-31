@@ -14,6 +14,7 @@ en:
     roles: "Роли Доступа"
     success_destroy: "Запись успешно удалена, со всеми связаніми записями"
     delete_permission_confirm:  "Вы уверены что хотите удалить право доступа "
+    delete_role_confirm: "Вы уверены что хотите Роль доступа "
     delete_modules_confirm: "Вы уверены что хотите модуль "
     OK: "OK"
     cancel: "Отмена"

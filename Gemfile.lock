@@ -3,6 +3,7 @@ PATH
   specs:
     b1_admin (0.0.1)
       active_attr
+      active_model_serializers
       angular-ui-bootstrap-rails
       angularjs-rails
       bcrypt

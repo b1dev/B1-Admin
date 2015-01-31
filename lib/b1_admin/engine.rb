@@ -19,7 +19,7 @@ module B1Admin
         end
       end
     end
-
+    config.autoload_paths += Dir[config.root.join('app', 'serializers', '{**}')]
     config.i18n.enforce_available_locales = false
     config.assets.paths << config.root.join("app", "assets", "fonts")
     config.assets.precompile += %w( b1_admin/login.css b1_admin/login.js)

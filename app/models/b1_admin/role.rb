@@ -3,8 +3,8 @@ module B1Admin
     includes :modules
     #Relations
     has_and_belongs_to_many :users
-    has_and_belongs_to_many :permissions
-    has_and_belongs_to_many :modules
+    has_and_belongs_to_many :permissions, autosave: true
+    has_and_belongs_to_many :modules, autosave: true
     #End Relations
 
     #Validates
@@ -13,6 +13,10 @@ module B1Admin
     	validates :"desc_#{l}", length: { in: 10..50},format: {with:/\A^[^`!@#\$%\^&*+_=]+\z/i}
   	end
     #End validates
+
+    def desc
+      read_attribute "desc_#{I18n.locale}"
+    end
 
     # Get all parent modules that has relation with current role
 		# @retrun [Array<B1Admin::Module>]

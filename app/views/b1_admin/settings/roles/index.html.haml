@@ -1,7 +1,7 @@
 #page-title
   %h1.page-header.text-overflow
     =t("b1_admin.roles")
-#page-content{:"ng-controller"=>"RolesController",:"data-url"=>settings_roles_path,:"data-actions-url"=>settings_permissions_actions_path,:"data-delete-text"=>t("b1_admin.delete_permission_confirm")}    
+#page-content{:"ng-controller"=>"RolesController",:"data-url"=>settings_roles_path,:"data-delete-text"=>t("b1_admin.delete_role_confirm")}    
   .row
     .panel
       .panel-heading
@@ -11,14 +11,15 @@
 
       .panel-body
         %table.table.table-striped#itemsTable{"ng-table"=>"itemsTable"}
-          %tr{"ng-repeat" => "item in $data"}
+          %tr{"ng-repeat" => "item in data"}
             %td{style:"text-align: center;", "data-title" => "'#{t('b1_admin.title')}'"}
               {{item.name}}
             %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.info')}'"}
-              %a.fa.fa-question{href:"#"}
+              {{item.desc}}
+              %a.fa.fa-question-circle{href:"#","popover-trigger"=>"mouseenter","popover"=>"{{item.permissions}}","popover-placement"=>"left"}
             %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.user_actions')}'"}
               - if user_can?(:destroy)
-                %button.btn.btn-danger{"ng-click" => "destroy(item.id)"}
+                %button.btn.btn-danger{"ng-click" => "destroy(item)"}
                   =t("b1_admin.delete")
                   %i.fa.fa-minus-circle
               - if user_can?(:edit)
