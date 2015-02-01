@@ -22,6 +22,7 @@ module B1Admin
 
     has_attached_file :avatar, styles: { medium: "300x300>",thumb: "100x100>" }, default_url: "/assets/b1_admin/avatar-missing.png"
     
+    validates_attachment_file_name :avatar, :matches => [/png\Z/, /jpe?g\Z/, /gif\Z/]
     # Check if current user has access to requested action
 		# @param  [String] Requested class
 		# @param  [String] Requested action in class
@@ -31,7 +32,7 @@ module B1Admin
        cls.each{|c| has_access = false unless all_user_modules.map(&:controller).include?(c)} 
        if has_access
          mod =  all_user_modules.select{|m| m.controller == cls.last}.first
-         has_access = self.roles.map(&:permissions).flatten.select{|p| p.admin_module_id == mod.id}.map(&:action).include?(action)
+         has_access = self.permissions.select{|p| p.admin_module_id == mod.id}.map(&:action).include?(action)
        end
        has_access
     end
@@ -53,15 +54,21 @@ module B1Admin
     # Return all availible for user parent modules without their childs
 		# @retrun [Array<B1Admin::Module>]
     def modules
-      Rails.cache.fetch "#{self.id}_modules" do 
-        self.roles.map(&:parent_modules).flatten
-      end
+      self.roles.map(&:parent_modules).flatten
     end
     
+    # Return all availible permission for user
+    # @retrun [Array<B1Admin::Permission>]
+    def permissions
+      self.roles.map(&:permissions).flatten
+    end
+
+
     #TODO
     def can? method_name, controller_name
       true
     end
+
 
     # Authenticate current user by password, block user if wrong password auth attempts greather of maximum
     # @note That method use gem "signinable"
@@ -94,7 +101,12 @@ module B1Admin
     def messages
       []
     end
-    
+
+    #TODO
+    def messages_count
+      3
+    end
+
     private
     # Return all availible for user parent modules and their childs
 		# @retrun [Array<B1Admin::Module>]

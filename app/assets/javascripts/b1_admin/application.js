@@ -8,9 +8,10 @@
 //= require ./vendor/pace.min
 //= require ./vendor/angular-ui-tree
 //= require ./vendor/bootstrap.min
-//= require ./vendor/plugins.min
+//= require ./vendor/plug
 //= require ./vendor/ng-table
 //= require ./vendor/angular-bootstrap-switch
+//= require ./vendor/compareTo
 //= require ./angular/app
 //= require_tree ./angular/.
 //= require_self

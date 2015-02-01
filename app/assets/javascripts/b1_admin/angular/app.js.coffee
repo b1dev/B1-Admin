@@ -1,4 +1,4 @@
-app = angular.module("B1Admin", ["ngRoute","ngResource","ui.tree",'ui.bootstrap','ngTable',"NgSwitchery"])
+app = angular.module("B1Admin", ["ngRoute","ngResource","ui.tree",'ui.bootstrap','ngTable',"NgSwitchery","pwCheck"])
 
 app.run [
     "$location"
@@ -46,10 +46,17 @@ app.run [
       $rootScope.setRoute = (path) ->
         $location.path = path
         $http.get("#{path}?only_template").success (resp) ->
-          $content = angular.element("#content-container")
-          $content.html resp
+          angular.element("#content-container").remove()
+          angular.element("#aside-container").remove()
+          $content = angular.element("#main_content")
+          $content.append resp
           scope = $content.scope()
           $compile($content.contents()) scope
+          console.log(angular.element("#aside-container").length)
+          if angular.element("#aside-container").length
+            angular.element("#container").addClass("aside-in aside-left aside-bright")
+          else
+            angular.element("#container").removeClass("aside-in aside-left aside-bright")
           loadPluguns()
 
 

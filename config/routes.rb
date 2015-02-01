@@ -19,7 +19,9 @@ B1Admin::Engine.routes.draw do
     namespace :permissions do 
       post "actions"
     end
-
+    namespace :admins do 
+      post "upload"
+    end
   end
 
   namespace :logs do 

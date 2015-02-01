@@ -1,6 +1,6 @@
 module B1Admin
-  module Settings
-    class AdminsController < B1Admin::ApplicationController
+  module Logs
+    class SystemsController < B1Admin::ApplicationController
       before_filter :check_item, only:[:show,:update,:destroy,:edit,:upload]
 
       skip_before_filter :verify_authenticity_token, only: :upload

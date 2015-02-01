@@ -1,5 +1,12 @@
 en:
   b1_admin:
+    signins_count: "Входов"
+    admin_permissions: "Возможности"
+    admins_history: "История действий"
+    sended_messages: "Отправленых сообщений"
+    add_photo: "Установить фото"
+    password: "Пароль"
+    password_confirmation: "Подтверждение пароля"
     _true: "Да"
     _false: "Нет"
     created_at: "Дата создания"
@@ -17,6 +24,7 @@ en:
     check_all: "Включить все"
     desc: "Описание"
     role_manage: "Создание/редактирование роли доступа"
+    admins_manage: "Создание/редактирование администратора"
     back_to_list: "Вернуться к списку"
     roles_list: "Список ролей доступа"
     info: "Инфо"

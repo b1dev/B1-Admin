@@ -39,14 +39,9 @@
                       %i {{item.blocked_until | date:'dd.MM.yyyy HH:mm '}}
                     %span{"ng-switch-default" => ""}=t('b1_admin._false') 
 
-              %td{"data-title" => "'#{t('b1_admin.user_actions')}'"}
+              %td.min-w-td.text-center{"data-title" => "'#{t('b1_admin.user_actions')}'"}
                 - if user_can?(:destroy)
-                  %button.btn.btn-danger{"ng-click" => "destroy(item)"}
-                    =t("b1_admin.delete")
-                    %i.fa.fa-minus-circle
+                  %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-danger.fa.fa-times.add-tooltip{"tooltip" => t("b1_admin.delete"), :href => "#","ng-click" => "destroy(item)"}
                 - if user_can?(:edit)
-                  %a.btn.btn-mint{href:"#{settings_admins_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_admins_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
-                    =t("b1_admin.edit")
-                    %i.fa.fa-pencil
-
+                  %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-success.fa.fa-pencil.add-tooltip{"tooltip" => t("b1_admin.edit"),href:"#{settings_admins_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_admins_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
 

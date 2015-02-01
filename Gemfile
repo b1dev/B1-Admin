@@ -24,6 +24,7 @@ gem "actionpack-action_caching"
 gem 'angular-ui-bootstrap-rails'
 gem 'will_paginate', '~> 3.0.6'
 gem 'active_model_serializers'
+gem "mongoid", "~> 4.0.0"
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

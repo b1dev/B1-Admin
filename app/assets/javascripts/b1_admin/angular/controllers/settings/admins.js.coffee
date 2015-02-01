@@ -34,14 +34,9 @@ angular.module("B1Admin").controller "AdminsController", [
 
     setChecked = (modId,type) ->
       type = type or false
-      angular.forEach $scope.modules, ((mod) ->
-        angular.forEach mod.childs, ((mod) ->
-          if mod.id is modId
-            angular.forEach mod.permissions, ((perm) ->
-              delete($scope.editedItem.permissions[perm.id]) unless type
-              $scope.editedItem.permissions[perm.id] = true if type
-            )
-        )
+      angular.forEach $scope.roles, ((role) ->
+        delete($scope.editedItem.roles[role.id]) unless type
+        $scope.editedItem.roles[role.id] = true if type
       )
 
     saveCallback = (resp,clear) ->
@@ -55,10 +50,11 @@ angular.module("B1Admin").controller "AdminsController", [
         $rootScope.error(alertSelector,resp.msg)
       $anchorScroll()
 
-    $scope.uncheckAll = (modId) ->
-      setChecked(modId)
-    $scope.checkAll = (modId) ->
-      setChecked(modId,true)
+    $scope.uncheckAll = (roleId) ->
+      console.log($scope.editedItem,$scope.roles)
+      setChecked(roleId)
+    $scope.checkAll = (roleId) ->
+      setChecked(roleId,true)
 
     $scope.edit = (id)->
       Item.get {id:id}, (resp) ->
@@ -69,7 +65,7 @@ angular.module("B1Admin").controller "AdminsController", [
     $scope.destroy = (item) ->
       data =
         id: item.id
-        title: "#{$element.data("deleteText")} - #{item.desc}"
+        title: "#{$element.data("deleteText")} - #{item.name}"
       $rootScope.confirm(data).result.then ((result) ->
         $rootScope.showLoader()
         Item.delete {id:item.id}, (resp) ->
@@ -79,24 +75,7 @@ angular.module("B1Admin").controller "AdminsController", [
       )
 
     $scope.save = ->
-      modules = []
-      permissions = []
-      _permissions = []
-      angular.forEach Object.keys($scope.editedItem.permissions), ((id) ->
-        _permissions.push(id) if $scope.editedItem.permissions[id]
-      )
-      angular.forEach $scope.modules, ((parentMod) ->
-        angular.forEach parentMod.childs, ((mod) ->
-          angular.forEach mod.permissions, ((perm) ->
-            if _permissions.indexOf(String(perm.id)) >= 0
-              modules.push(parentMod.id)
-              modules.push(mod.id)
-              permissions.push(perm.id)
-          )
-        )
-      )
-      $scope.editedItem.permission_ids = permissions
-      $scope.editedItem.module_ids     = modules.unique()
+      $scope.editedItem.role_ids = Object.keys($scope.editedItem.roles)
       $scope.itemForm.$setSubmitted()
       if $scope.itemForm.$valid
         $rootScope.showLoader()

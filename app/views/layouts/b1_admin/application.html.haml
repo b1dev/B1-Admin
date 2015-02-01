@@ -118,7 +118,7 @@
             #mainnav-menu-wrap
               .nano
                 .nano-content{:"ng-controller"=>"LeftPanelController"}
-                  - cache current_admin do
+                  - cache current_admin.roles do
                     %ul#mainnav-menu.list-group
                       / Category name
                       %li.list-header=t("b1_admin.allowed_modules")
@@ -168,6 +168,8 @@
             / ================================
             / End menu
         
+      .boxed#main_content
+
         = yield
 
         / ASIDE
