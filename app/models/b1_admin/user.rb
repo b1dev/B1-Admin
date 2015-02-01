@@ -17,6 +17,7 @@ module B1Admin
 
     #Relations
     has_and_belongs_to_many :roles
+    from_mysql_has_many  :logs, foreign_key: :user_id , class: B1Admin::Log
     #End Relations
     
 

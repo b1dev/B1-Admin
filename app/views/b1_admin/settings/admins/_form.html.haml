@@ -3,7 +3,7 @@
     %a.btn.btn-success.pull-right{href:settings_admins_path,"ng-click"=>"$root.setRoute('#{settings_admins_path}')"}=t("b1_admin.back_to_list")
     %h1.page-header.text-overflow
       =t("b1_admin.admins")
-  #page-content{:"ng-controller"=>"AdminsController","ng-init"=>"roles=#{@roles.to_json}; editedItem=#{@item.serializable_hash.to_json}",:"data-url"=>settings_admins_path,:"data-delete-text"=>t("b1_admin.delete_admins_confirm")}  
+  #page-content{:"ng-controller"=>"AdminsController","ng-init"=>"roles=#{@roles.to_json}; editedItem=#{@item.serializable_hash.to_json}",:"data-url"=>settings_admins_path,:"data-history-url"=>settings_admins_history_path,:"data-delete-text"=>t("b1_admin.delete_admins_confirm")}  
     .row
       .col-lg-6
         .panel
@@ -71,61 +71,11 @@
           .panel-heading
             %h3.panel-title=t("b1_admin.admins_history")
           .panel-body
-            / Timeline
-            / ===================================================
+            %table.table.table-hover.table-striped.table-vcenter#subitemsTable{"ng-table"=>"subitemsTable"}
+              %tr{"ng-repeat" => "item in subData"}
+                %td.min-w-td{"data-title" => "'#'"}
+                  {{item.id}}
             .timeline
-              / Timeline header
-              .timeline-header.bg-success Now
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon
-                    %img{:alt => "Profile picture", :src => "img/av6.png"}
-                  .timeline-time 30 Min ago
-                .timeline-label
-                  %p.mar-no.pad-btm
-                    %a.btn-link.text-semibold{:href => "#"} Maria J.
-                    shared an image
-                  .img-holder
-                    %img{:alt => "Image", :src => "img/thumbs/img2.jpg"}
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon.bg-danger
-                    %i.fa.fa-building.fa-lg
-                  .timeline-time 2 Hours ago
-                .timeline-label
-                  %h4.mar-no.pad-btm
-                    %a.text-danger{:href => "#"} Job Meeting
-                  %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon
-                    %img{:alt => "Profile picture", :src => "img/av4.png"}
-                  .timeline-time 3 Hours ago
-                .timeline-label
-                  %p.mar-no.pad-btm
-                    %a.btn-link.text-semibold{:href => "#"} Lisa D.
-                    commented on
-                    %a{:href => "#"} The Article
-                  %blockquote.bq-sm.bq-open Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon.bg-purple
-                    %i.fa.fa-check.fa-lg
-                  .timeline-time 5 Hours ago
-                .timeline-label
-                  %img.img-xs.img-circle{:alt => "Profile picture", :src => "img/av3.png"}
-                    %a.btn-link.text-semibold{:href => "#"} Bobby Marz
-                    followed you.
-              / Timeline header
-              .timeline-header.bg-dark Yesterday
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon.bg-info
-                    %i.fa.fa-envelope.fa-lg
-                  .timeline-time 15:45
-                .timeline-label
-                  %h4.text-info.mar-no.pad-btm Lorem ipsum dolor sit amet
-                  %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
               .timeline-entry
                 .timeline-stat
                   .timeline-icon.bg-success
@@ -136,12 +86,6 @@
                     %a.btn-link.text-semibold{:href => "#"} Michael Both
                     Like
                     %a{:href => "#"} The Article
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon
-                  .timeline-time 11:27
-                .timeline-label
-                  %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
           / ===================================================
           / End Timeline
   / ===================================================

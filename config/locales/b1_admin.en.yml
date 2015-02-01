@@ -1,5 +1,7 @@
 en:
   b1_admin:
+    type: "Тип"
+    admin_logs: Логи админ панели
     signins_count: "Входов"
     admin_permissions: "Возможности"
     admins_history: "История действий"

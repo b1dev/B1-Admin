@@ -6,8 +6,8 @@ angular.module("B1Admin").controller "AdminsController", [
   "Config"
   "$rootScope"
   "$anchorScroll"
-  "$timeout"
-  ($scope,ngTableParams,$resource,$element,Config,$rootScope,$anchorScroll,$timeout) ->
+  "$http"
+  ($scope,ngTableParams,$resource,$element,Config,$rootScope,$anchorScroll,$http) ->
 
     alertSelector = "#content-container"
 
@@ -25,6 +25,21 @@ angular.module("B1Admin").controller "AdminsController", [
             $scope.data = data.items.slice((params.page() - 1) * params.count())
 
       )
+    if angular.element("#subitemsTable").length
+      $scope.subitemsTable = new ngTableParams(
+        page: 1 
+        count: Config.perPage
+        total: 0
+      ,
+        counts: []
+        getData: ($defer, params) ->
+          $http.post($element.data("historyUrl"), {id: $scope.editedItem.id}).success (resp) ->
+            if resp.success
+              params.total(resp.total)
+              $scope.subData = resp.items.slice((params.page() - 1) * params.count())
+
+      )
+
 
     setItem = (item) ->
       $scope.editedItem = item
@@ -55,6 +70,7 @@ angular.module("B1Admin").controller "AdminsController", [
       setChecked(roleId)
     $scope.checkAll = (roleId) ->
       setChecked(roleId,true)
+
 
     $scope.edit = (id)->
       Item.get {id:id}, (resp) ->

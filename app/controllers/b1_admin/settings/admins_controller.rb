@@ -1,7 +1,7 @@
 module B1Admin
   module Settings
     class AdminsController < B1Admin::ApplicationController
-      before_filter :check_item, only:[:show,:update,:destroy,:edit,:upload]
+      before_filter :check_item, only:[:show,:update,:destroy,:edit,:upload,:history]
 
       skip_before_filter :verify_authenticity_token, only: :upload
       ##
@@ -15,7 +15,7 @@ module B1Admin
           end
           format.json do
             items = B1Admin::User.page(params[:page])
-            total = B1Admin::User.count
+            total = B1Admin::Log.count
             render json: {items:ActiveModel::ArraySerializer.new(items, each_serializer: B1Admin::Admins::ListSerializer) ,total:total}
           end
         end
@@ -97,6 +97,14 @@ module B1Admin
           response = fail_update_response @item
         end
         render json: response
+      end
+
+      ##
+      # User log history
+      # @render [JSON]
+      ##
+      def history
+        render json: {success: true,total: @item.logs.count, items: @item.logs.page(params[:page])}
       end
 
 

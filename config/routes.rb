@@ -21,6 +21,7 @@ B1Admin::Engine.routes.draw do
     end
     namespace :admins do 
       post "upload"
+      post "history"
     end
   end
 

@@ -18,9 +18,9 @@ module B1Admin
 		  	rake "db:seed"
 		  end
 
-		  def copy_files
-		  	#copy_file "avatar-missing.png","app/assets/avatar-missing.png"
-		  end
+      def create_logs_config_file
+      	template 'mongoid.yml', File.join('config', "mongoid.yml") , collision: :skip
+      end
 
 		end
   end

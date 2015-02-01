@@ -1,7 +1,44 @@
 module B1Admin
   class Log
-    include Mongoid::Document
+    STATUSES = {
+      success:   1,
+      warninig:  2,
+      error:     3,
+      exception: 4,
+    }
+    include ::Mongoid::Document
+    include MongoMysqlRelations
+    store_in session: 'b1_admin_logs'
 
-    store_in collection: 'tickets_core_logs', session: 'fluentd_logs'
+    field :controller  , type: String
+    field :action      , type: String
+    field :user_id     , type: Integer
+    field :params      , type: Hash
+    field :status      , type: Integer
+    field :ip          , type: String
+    field :user_agent  , type: String
+    field :description , type: String
+    field :time        , type: Integer
+
+    index(user_id: 1)
+    index({ controller: 1, action: 1 })
+    index(status: 1)
+
+    to_mysql_belongs_to :user, class: B1Admin::User, foreign_key: :user_id
+    # Insert log row to collection
+    # @raise  [B1Admin::Exception] if param have a wrong type
+    def self.activity row
+      setup
+      raise B1Admin::Exception.new(7,{text:"Create log row failed, param not a Hash:  #{row.inspect}"}) unless row.kind_of?(Hash)
+      B1Admin::Log.create(row)
+    end
+
+    # Set the current collection by month year pattern <logs_02_2015>
+    # If date not passed to method or isnt Date instance date set to Today
+    # @param [Date]
+    def self.setup date = false
+      date = date && date.kind_of?(Date) ? date : Date.today
+      store_in collection: date.strftime("logs_%m_%Y")
+    end
   end
 end

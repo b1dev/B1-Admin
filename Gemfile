@@ -25,6 +25,8 @@ gem 'angular-ui-bootstrap-rails'
 gem 'will_paginate', '~> 3.0.6'
 gem 'active_model_serializers'
 gem "mongoid", "~> 4.0.0"
+gem 'mongo_mysql_relations'
+gem "will_paginate_mongoid"
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'

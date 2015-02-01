@@ -1,0 +1,249 @@
+#content-container
+  #page-title
+    %h1.page-header.text-overflow
+      =t("b1_admin.admin_logs")
+  #page-content{:"ng-controller"=>"AdminLogsController",:"data-url"=>logs_systems_path}    
+    .row
+      .panel
+        .panel-body
+          %table.table.table-hover.table-striped.table-vcenter#itemsTable{"ng-table"=>"itemsTable"}
+            %tr{"ng-repeat" => "item in data"}
+              %td{"data-title" => "'#{t('b1_admin.type')}'"}
+                %img.img-circle.img-sm{"ng-src" => "{{item.title}}"}/
+                {{item.name}}
+              %td{"data-title" => "'#{t('b1_admin.email')}'"}
+                {{item.email}}
+              %td{"data-title" => "'#{t('b1_admin.phone')}'"}
+                {{item.phone | isempty: '--/--'}}
+              %td{"data-title" => "'#{t('b1_admin.position')}'"}
+                {{item.position | isempty: '--/--'}}
+              %td{"data-title" => "'#{t('b1_admin.created_at')}'"}
+                {{item.created_at | date:'dd.MM.yyyy HH:mm '}}
+              %td{"data-title" => "'#{t('b1_admin.active')}'"}
+                %span.label.text-lg{"ng-class"=>"{'label-success':item.active,'label-danger': !item.active }"}
+                  %span{"ng-switch" => "", :on => "item.active"}
+                    %span{"ng-switch-when" => "true"}=t('b1_admin._true')
+                    %span{"ng-switch-default" => ""}=t('b1_admin._false')
+              %td{"data-title" => "'#{t('b1_admin.blocked')}'"}
+                %span.label.text-lg{"ng-class"=>"{'label-danger':item.blocked,'label-success': !item.blocked }"}
+                  %span{"ng-switch" => "", :on => "item.blocked"}
+                    %span{"ng-switch-when" => "true"}
+                      =t('b1_admin._true') 
+                      %i {{item.blocked_until | date:'dd.MM.yyyy HH:mm '}}
+                    %span{"ng-switch-default" => ""}=t('b1_admin._false') 
+
+              %td.min-w-td.text-center{"data-title" => "'#{t('b1_admin.user_actions')}'"}
+                - if user_can?(:destroy)
+                  %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-danger.fa.fa-times.add-tooltip{"tooltip" => t("b1_admin.delete"), :href => "#","ng-click" => "destroy(item)"}
+                - if user_can?(:edit)
+                  %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-success.fa.fa-pencil.add-tooltip{"tooltip" => t("b1_admin.edit"),href:"#{settings_admins_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_admins_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
+
+- content_for :aside do
+  .hidden
+%aside#aside-container
+  #aside
+    .nano.has-scrollbar
+      .nano-content{:style => "right: -15px;", :tabindex => "0"}
+        / Nav tabs
+        / ================================
+        %ul.nav.nav-tabs.nav-justified
+          %li.active
+            %a{"aria-expanded" => "true", "data-toggle" => "tab", :href => "#demo-asd-tab-1"}
+              %i.fa.fa-comments
+              %span.badge.badge-purple 7
+          %li
+            %a{"aria-expanded" => "false", "data-toggle" => "tab", :href => "#demo-asd-tab-2"}
+              %i.fa.fa-info-circle
+          %li
+            %a{"aria-expanded" => "false", "data-toggle" => "tab", :href => "#demo-asd-tab-3"}
+              %i.fa.fa-wrench
+        / ================================
+        / End nav tabs
+        / Tabs Content
+        / ================================
+        .tab-content
+          / First tab (Contact list)
+          / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          #demo-asd-tab-1.tab-pane.fade.active.in
+            %h4.pad-hor.text-thin
+              %span.pull-right.badge.badge-warning 3
+              Family
+            / Family
+            .list-group.bg-trans
+              %a.list-group-item{:href => "#"}
+                .media-left
+                  %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av2.png"}
+                .media-body
+                  .text-lg Stephen Tran
+                  %span.text-muted Availabe
+              %a.list-group-item{:href => "#"}
+                .media-left
+                  %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av4.png"}
+                .media-body
+                  .text-lg Brittany Meyer
+                  %span.text-muted I think so
+              %a.list-group-item{:href => "#"}
+                .media-left
+                  %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av3.png"}
+                .media-body
+                  .text-lg Donald Brown
+                  %span.text-muted Lorem ipsum dolor sit amet.
+            %hr
+              %h4.pad-hor.text-thin
+                %span.pull-right.badge.badge-info 4
+                Friends
+              / Friends
+              .list-group.bg-trans
+                %a.list-group-item{:href => "#"}
+                  .media-left
+                    %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av5.png"}
+                  .media-body
+                    .text-lg Betty Murphy
+                    %span.text-muted Bye
+                %a.list-group-item{:href => "#"}
+                  .media-left
+                    %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av6.png"}
+                  .media-body
+                    .text-lg Olivia Spencer
+                    %span.text-muted Thank you!
+                %a.list-group-item{:href => "#"}
+                  .media-left
+                    %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av4.png"}
+                  .media-body
+                    .text-lg Sarah Ruiz
+                    %span.text-muted 2 hours ago
+                %a.list-group-item{:href => "#"}
+                  .media-left
+                    %img.img-circle.img-xs{:alt => "Profile Picture", :src => "img/av3.png"}
+                  .media-body
+                    .text-lg Paul Aguilar
+                    %span.text-muted 2 hours ago
+              %hr
+                %h4.pad-hor.text-thin
+                  %span.pull-right.badge.badge-success Offline
+                  Works
+                / Works
+                .list-group.bg-trans
+                  %a.list-group-item{:href => "#"}
+                    %span.badge.badge-purple.badge-icon.badge-fw.pull-left
+                    Joey K. Greyson
+                  %a.list-group-item{:href => "#"}
+                    %span.badge.badge-info.badge-icon.badge-fw.pull-left
+                    Andrea Branden
+                  %a.list-group-item{:href => "#"}
+                    %span.badge.badge-pink.badge-icon.badge-fw.pull-left
+                    Lucy Moon
+                  %a.list-group-item{:href => "#"}
+                    %span.badge.badge-success.badge-icon.badge-fw.pull-left
+                    Johny Juan
+                  %a.list-group-item{:href => "#"}
+                    %span.badge.badge-danger.badge-icon.badge-fw.pull-left
+                    Susan Sun
+          / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          / End first tab (Contact list)
+          / Second tab (Custom layout)
+          / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          #demo-asd-tab-2.tab-pane.fade
+            / Monthly billing
+            .pad-all
+              %h4.text-lg.mar-no Monthly Billing
+              %p.text-sm January 2015
+              %button.btn.btn-block.btn-success.mar-top Pay Now
+            %hr
+              / Information
+              .text-center.clearfix.pad-top
+                .col-xs-6
+                  %span.h4 4,327
+                  %p.text-muted.text-uppercase
+                    %small Sales
+                .col-xs-6
+                  %span.h4 $ 1,252
+                  %p.text-muted.text-uppercase
+                    %small Earning
+              %hr
+                / Simple Menu
+                .list-group.bg-trans
+                  %a.list-group-item{:href => "#"}
+                    %span.label.label-danger.pull-right> Featured
+                    Edit Password
+                  %a.list-group-item{:href => "#"} Email
+                  %a.list-group-item{:href => "#"}
+                    %span.label.label-success.pull-right> New
+                    Chat
+                  %a.list-group-item{:href => "#"} Reports
+                  %a.list-group-item{:href => "#"} Transfer Funds
+                %hr
+                  .text-center
+                    Questions?
+                    %p.text-lg.text-semibold (415) 234-53454
+                    %small
+                      %em We are here 24/7
+          / End second tab (Custom layout)
+          / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          / Third tab (Settings)
+          / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          #demo-asd-tab-3.tab-pane.fade
+            %ul.list-group.bg-trans
+              %li.list-header
+                %h4.text-thin Account Settings
+              %li.list-group-item
+                .pull-right
+                  %input.demo-switch{:checked => "", "data-switchery" => "true", :style => "display: none;", :type => "checkbox"}
+                    %span.switchery.switchery-default{:style => "border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 0px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; -webkit-transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; background-color: rgb(100, 189, 99);"}
+                      %small{:style => "left: 17px; transition: left 0.2s; -webkit-transition: left 0.2s; background-color: rgb(255, 255, 255);"}
+                %p Show my personal status
+                %small.text-muted Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+              %li.list-group-item
+                .pull-right
+                  %input.demo-switch{:checked => "", "data-switchery" => "true", :style => "display: none;", :type => "checkbox"}
+                    %span.switchery.switchery-default{:style => "border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 0px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; -webkit-transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; background-color: rgb(100, 189, 99);"}
+                      %small{:style => "left: 17px; transition: left 0.2s; -webkit-transition: left 0.2s; background-color: rgb(255, 255, 255);"}
+                %p Show offline contact
+                %small.text-muted Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+              %li.list-group-item
+                .pull-right
+                  %input.demo-switch{"data-switchery" => "true", :style => "display: none;", :type => "checkbox"}
+                    %span.switchery.switchery-default{:style => "box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset; border-color: rgb(223, 223, 223); transition: border 0.4s, box-shadow 0.4s; -webkit-transition: border 0.4s, box-shadow 0.4s; background-color: rgb(255, 255, 255);"}
+                      %small{:style => "left: 0px; transition: left 0.2s; -webkit-transition: left 0.2s; background-color: rgb(255, 255, 255);"}
+                %p Invisible mode
+                %small.text-muted Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+            %hr
+              %ul.list-group.bg-trans
+                %li.list-header
+                  %h4.text-thin Public Settings
+                %li.list-group-item
+                  .pull-right
+                    %input.demo-switch{:checked => "", "data-switchery" => "true", :style => "display: none;", :type => "checkbox"}
+                      %span.switchery.switchery-default{:style => "border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 0px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; -webkit-transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; background-color: rgb(100, 189, 99);"}
+                        %small{:style => "left: 17px; transition: left 0.2s; -webkit-transition: left 0.2s; background-color: rgb(255, 255, 255);"}
+                  Online status
+                %li.list-group-item
+                  .pull-right
+                    %input.demo-switch{:checked => "", "data-switchery" => "true", :style => "display: none;", :type => "checkbox"}
+                      %span.switchery.switchery-default{:style => "border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 0px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; -webkit-transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; background-color: rgb(100, 189, 99);"}
+                        %small{:style => "left: 17px; transition: left 0.2s; -webkit-transition: left 0.2s; background-color: rgb(255, 255, 255);"}
+                  Show offline contact
+                %li.list-group-item
+                  .pull-right
+                    %input.demo-switch{"data-switchery" => "true", :style => "display: none;", :type => "checkbox"}
+                      %span.switchery.switchery-default{:style => "box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset; border-color: rgb(223, 223, 223); transition: border 0.4s, box-shadow 0.4s; -webkit-transition: border 0.4s, box-shadow 0.4s; background-color: rgb(255, 255, 255);"}
+                        %small{:style => "left: 0px; transition: left 0.2s; -webkit-transition: left 0.2s; background-color: rgb(255, 255, 255);"}
+                  Show my device icon
+              %hr
+                %h4.pad-hor.text-thin Task Progress
+                .pad-all
+                  %p Upgrade Progress
+                  .progress.progress-sm
+                    .progress-bar.progress-bar-success{:style => "width: 15%;"}
+                      %span.sr-only 15%
+                  %small.text-muted 15% Completed
+                .pad-hor
+                  %p Database
+                  .progress.progress-sm
+                    .progress-bar.progress-bar-danger{:style => "width: 75%;"}
+                      %span.sr-only 75%
+                  %small.text-muted 17/23 Database
+          / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          / Third tab (Settings)
+      .nano-pane{:style => "display: block;"}
+        .nano-slider{:style => "height: 20px; transform: translate(0px, 0px);"}
