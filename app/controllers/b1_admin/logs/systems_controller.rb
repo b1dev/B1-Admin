@@ -8,9 +8,9 @@ module B1Admin
       # @render [JSON]
       ##
       def index
-        p B1Admin::Log.setup.desc(:time).page(params[:page])
         respond_to do |format|
           format.html do 
+            @modules = B1Admin::Module.where("parent_id > 0").all.inject({}){|hash,m| hash.merge!({m.id.to_s => m.name})}
             render layout: !params.has_key?(:only_template)
           end
           format.json do

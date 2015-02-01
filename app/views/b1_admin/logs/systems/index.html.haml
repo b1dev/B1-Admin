@@ -1,4 +1,4 @@
-%div{:"ng-controller"=>"AdminLogsController",:"data-url"=>logs_systems_path,"ng-init"=>"statuses = #{t('b1_admin.statuses').invert.to_json}"}   
+%div{:"ng-controller"=>"AdminLogsController",:"data-url"=>logs_systems_path,"ng-init"=>"statuses = #{t('b1_admin.statuses').to_json};modules=#{@modules.to_json};$root.updateSelect()"}   
   #content-container
     #page-title
       %h1.page-header.text-overflow

@@ -44,7 +44,11 @@ angular.module("B1Admin").controller "AdminLogsController", [
         )
       , ->
         $rootScope.error(alertSelector,$rootScope.server_error)
+    $scope.filter = ->
+      console.log($scope.statuses)
 ]
+
+
 angular.module("B1Admin").controller "AdminLogController", [
   "$scope"
   "$modalInstance"
