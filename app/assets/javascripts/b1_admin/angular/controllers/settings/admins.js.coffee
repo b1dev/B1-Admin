@@ -10,7 +10,12 @@ angular.module("B1Admin").controller "AdminsController", [
   ($scope,ngTableParams,$resource,$element,Config,$rootScope,$anchorScroll,$http) ->
 
     alertSelector = "#content-container"
-
+    $scope.statusColors = 
+      1: "#4EAE32"
+      2: "#EED80B"
+      3: "#D85C28"
+      4: "#FF0101"
+      
     Item = $resource("#{$element.data("url")}/:id.json",{},{query:{isArray:false},update:{ method:'PUT' }})
     if angular.element("#itemsTable").length
       $scope.itemsTable = new ngTableParams(

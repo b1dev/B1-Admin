@@ -78,3 +78,7 @@ app.filter 'isempty', ->
     if input
       return input
     replaceText
+
+app.filter 'asDate', ->
+  (input) ->
+    new Date(input * 1000)

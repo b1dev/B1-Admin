@@ -10,24 +10,24 @@ module B1Admin
   	helper_method :logged_in?
 
     around_filter do |controller, action_block|
+      row = {
+        controller:  params[:controller].split("/").last,
+        action:      params[:action],
+        user_id:     current_admin ? current_admin.id : 0,
+        params:      params,
+        status:      B1Admin::Log::STATUSES[:success],
+        ip:          request.remote_ip,
+        user_agent:  request.user_agent,
+        description: "",
+        time:        Time.now.to_i
+      }
       begin
-        row = {
-          controller:  params[:controller].split("/").last,
-          action:      params[:action],
-          user_id:     current_admin.id,
-          params:      params,
-          status:      B1Admin::Log::STATUSES[:success],
-          ip:          request.remote_ip,
-          user_agent:  request.user_agent,
-          description: "",
-          time:        Time.now.to_i
-        }
         action_block.call 
         B1Admin::Log.activity(row)
       rescue B1Admin::Exception => e
         B1Admin::Log.activity(row.merge({status: B1Admin::Log::STATUSES[:error],description: [e.message,e.backtrace].join("|")}))
         render {success:false,msg:"Server Error"}
-      rescue Exception => e
+      rescue => e
         B1Admin::Log.activity(row.merge({status: B1Admin::Log::STATUSES[:exception],description: [e.message,e.backtrace].join("|")}))
         render {success:false,msg:"Server Error"}
       end

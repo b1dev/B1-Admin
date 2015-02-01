@@ -104,7 +104,7 @@ module B1Admin
       # @render [JSON]
       ##
       def history
-        render json: {success: true,total: @item.logs.count, items: @item.logs.page(params[:page])}
+        render json: {success: true,total: @item.logs.count, items: ActiveModel::ArraySerializer.new(@item.logs.page(params[:page]), each_serializer: B1Admin::Logs::ListSerializer) }
       end
 
 

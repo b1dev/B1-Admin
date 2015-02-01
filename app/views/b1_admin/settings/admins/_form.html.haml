@@ -73,23 +73,19 @@
           .panel-body
             %table.table.table-hover.table-striped.table-vcenter#subitemsTable{"ng-table"=>"subitemsTable"}
               %tr{"ng-repeat" => "item in subData"}
-                %td.min-w-td{"data-title" => "'#'"}
-                  {{item.id}}
-            .timeline
-              .timeline-entry
-                .timeline-stat
-                  .timeline-icon.bg-success
-                    %i.fa.fa-thumbs-up.fa-lg
-                  .timeline-time 13:27
-                .timeline-label
-                  %img.img-xs.img-circle{:alt => "Profile picture", :src => "img/av2.png"}
-                    %a.btn-link.text-semibold{:href => "#"} Michael Both
-                    Like
-                    %a{:href => "#"} The Article
-          / ===================================================
-          / End Timeline
-  / ===================================================
-  / End page content
+                %td{"data-title" => "'#{t('b1_admin.module')}'"}
+                  {{item.module}}
+                %td{"data-title" => "'#{t('b1_admin.action')}'"}
+                  {{item.action_title}}
+                %td{"data-title" => "'#{t('b1_admin.created_at')}'"}
+                  {{item.time | asDate | date:'dd.MM.yyyy HH:mm '}}
+                %td{"data-title" => "'#{t('b1_admin.status')}'"}
+                  %span.label.text-lg{style:"background-color:{{statusColors[item.status]}}"}
+                    %span{"ng-switch" => "", :on => "item.status"}
+                      %span{"ng-switch-when" => "1"}=t('b1_admin.statuses._1')
+                      %span{"ng-switch-when" => "2"}=t('b1_admin.statuses._2')
+                      %span{"ng-switch-when" => "3"}=t('b1_admin.statuses._3')
+                      %span{"ng-switch-when" => "4"}=t('b1_admin.statuses._4')
 - content_for :aside do
   .hidden
 

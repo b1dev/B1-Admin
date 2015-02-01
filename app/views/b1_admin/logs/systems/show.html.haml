@@ -1,0 +1,17 @@
+%div{"ng-controller" => "ModalDemoCtrl"}
+  %script{:id => "adminLog.html", :type => "text/ng-template"}
+    .modal-header
+      %h3.modal-title I'm a modal!
+    .modal-body
+      %ul
+        %li{"ng-repeat" => "item in items"}
+          %a{"ng-click" => "selected.item = item"} {{ item }}
+      Selected:
+      %b {{ selected.item }}
+    .modal-footer
+      %button.btn.btn-primary{"ng-click" => "ok()"} OK
+      %button.btn.btn-warning{"ng-click" => "cancel()"} Cancel
+  %button.btn.btn-default{"ng-click" => "open()"} Open me!
+  %button.btn.btn-default{"ng-click" => "open('lg')"} Large modal
+  %button.btn.btn-default{"ng-click" => "open('sm')"} Small modal
+  %div{"ng-show" => "selected"} Selection from a modal: {{ selected }}
