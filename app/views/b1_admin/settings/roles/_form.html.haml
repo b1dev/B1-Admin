@@ -1,60 +1,61 @@
-#page-title
-  %h1.page-header.text-overflow
-    =t("b1_admin.roles")
-#page-content{:"ng-controller"=>"RolesController","ng-init"=>"modules=#{@modules.to_json}; editedItem=#{@item.to_json}",:"data-url"=>settings_roles_path,:"data-delete-text"=>t("b1_admin.delete_permission_confirm")}    
-  .row
-    .panel
-      .panel-heading
-        .panel-control
-          %a.btn.btn-success{href:settings_roles_path,"ng-click"=>"$root.setRoute('#{settings_roles_path}')"}=t("b1_admin.back_to_list")
-        %h3.panel-title=t("b1_admin.role_manage")
-      = form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :itemForm do
-        .panel-body
-          .row
-            .col
-              .form-group{"ng-class" => "{'has-error': itemForm.name.$invalid && itemForm.$submitted}"}
-                = label_tag :name, t("b1_admin.title"), class:"col-sm-1 control-label"
-                .col-sm-11
-                  = text_field_tag :name,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.name"
-              - B1Admin::LANGS.each do |l|
-                .form-group{"ng-class" => "{'has-error': itemForm.desc_#{l}.$invalid && itemForm.$submitted}"}
-                  = label_tag :"desc_#{l}", "#{t("b1_admin.desc")} #{l.upcase}", class:"col-sm-1 control-label"
+#content-container
+  #page-title
+    %h1.page-header.text-overflow
+      =t("b1_admin.roles")
+  #page-content{:"ng-controller"=>"RolesController","ng-init"=>"modules=#{@modules.to_json}; editedItem=#{@item.to_json}",:"data-url"=>settings_roles_path,:"data-delete-text"=>t("b1_admin.delete_permission_confirm")}    
+    .row
+      .panel
+        .panel-heading
+          .panel-control
+            %a.btn.btn-success{href:settings_roles_path,"ng-click"=>"$root.setRoute('#{settings_roles_path}')"}=t("b1_admin.back_to_list")
+          %h3.panel-title=t("b1_admin.role_manage")
+        = form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :itemForm do
+          .panel-body
+            .row
+              .col
+                .form-group{"ng-class" => "{'has-error': itemForm.name.$invalid && itemForm.$submitted}"}
+                  = label_tag :name, t("b1_admin.title"), class:"col-sm-1 control-label"
                   .col-sm-11
-                    = text_field_tag :"desc_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.desc_#{l}"
-            %hr
-            .col
-              %h5{style:"text-align:center"}=t("b1_admin.choose_modules_and_permissions")
-            .col
-              #accordion.panel-group
-                - @modules.each do |mod|
-                  .panel.panel-bordered
-                    .panel-heading
-                      %h4.panel-title
-                        %a=mod[:name]
-                    .panel
-                      .panel-body
-                        - mod[:childs].in_groups_of(2, false).each do |group|
-                          .col-sm-5
-                            - group.each do |m|
-                              .panel.panel-default
-                                .panel-heading{style:"background-color:transparent;color:black"}
-                                  .panel-control
-                                    %a.btn.btn-default{href:"#","ng-click"=>"uncheckAll(#{m[:id]})"}
-                                      =t("b1_admin.uncheck_all")
-                                      %i.fa.fa-circle-o
-                                    %a.btn.btn-default{href:"#","ng-click"=>"checkAll(#{m[:id]})"}
-                                      =t("b1_admin.check_all")
-                                      %i.fa.fa-check
-                                  %h3.panel-title=m[:name]
-                                .panel-body
-                                  %ul
-                                    - m[:permissions].each do |perm|
-                                      %li
-                                        %label=perm[:desc]
-                                        .pull-right
-                                          %input.js-switch{"ui-switch" => "true", type: "checkbox",id:"perm_#{perm[:id]}", "ng-model"=>"editedItem.permissions[#{perm[:id]}]"}
+                    = text_field_tag :name,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.name"
+                - B1Admin::LANGS.each do |l|
+                  .form-group{"ng-class" => "{'has-error': itemForm.desc_#{l}.$invalid && itemForm.$submitted}"}
+                    = label_tag :"desc_#{l}", "#{t("b1_admin.desc")} #{l.upcase}", class:"col-sm-1 control-label"
+                    .col-sm-11
+                      = text_field_tag :"desc_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.desc_#{l}"
+              %hr
+              .col
+                %h5{style:"text-align:center"}=t("b1_admin.choose_modules_and_permissions")
+              .col
+                #accordion.panel-group
+                  - @modules.each do |mod|
+                    .panel.panel-bordered
+                      .panel-heading
+                        %h4.panel-title
+                          %a=mod[:name]
+                      .panel
+                        .panel-body
+                          - mod[:childs].in_groups_of(2, false).each do |group|
+                            .col-sm-5
+                              - group.each do |m|
+                                .panel.panel-default
+                                  .panel-heading{style:"background-color:transparent;color:black"}
+                                    .panel-control
+                                      %a.btn.btn-default{href:"#","ng-click"=>"uncheckAll(#{m[:id]})"}
+                                        =t("b1_admin.uncheck_all")
+                                        %i.fa.fa-circle-o
+                                      %a.btn.btn-default{href:"#","ng-click"=>"checkAll(#{m[:id]})"}
+                                        =t("b1_admin.check_all")
+                                        %i.fa.fa-check
+                                    %h3.panel-title=m[:name]
+                                  .panel-body
+                                    %ul
+                                      - m[:permissions].each do |perm|
+                                        %li
+                                          %label=perm[:desc]
+                                          .pull-right
+                                            %input.js-switch{"ui-switch" => "true", type: "checkbox",id:"perm_#{perm[:id]}", "ng-model"=>"editedItem.permissions[#{perm[:id]}]"}
 
-        - if user_can?(:create) || user_can?(:update)
-          .panel-footer.text-right
-            = link_to t("b1_admin.save"),"#", class:"btn btn-info","ng-click" => "save()"
+          - if user_can?(:create) || user_can?(:update)
+            .panel-footer.text-right
+              = link_to t("b1_admin.save"),"#", class:"btn btn-info","ng-click" => "save()"
 

@@ -1,51 +1,52 @@
-#page-title
-  %h1.page-header.text-overflow
-    =t("b1_admin.admins")
-#page-content{:"ng-controller"=>"AdminsController",:"data-url"=>settings_admins_path,:"data-delete-text"=>t("b1_admin.delete_admins_confirm")}    
-  .row
-    .panel
-      .panel-heading
-        .panel-control
-          %a.btn.btn-primary{href:new_settings_admin_path,"ng-click"=>"$root.setRoute('#{new_settings_admin_path}')"}=t("b1_admin.add")
-        %h3.panel-title=t("b1_admin.admins_list")
+#content-container
+  #page-title
+    %h1.page-header.text-overflow
+      =t("b1_admin.admins")
+  #page-content{:"ng-controller"=>"AdminsController",:"data-url"=>settings_admins_path,:"data-delete-text"=>t("b1_admin.delete_admins_confirm")}    
+    .row
+      .panel
+        .panel-heading
+          .panel-control
+            %a.btn.btn-primary{href:new_settings_admin_path,"ng-click"=>"$root.setRoute('#{new_settings_admin_path}')"}=t("b1_admin.add")
+          %h3.panel-title=t("b1_admin.admins_list")
 
-      .panel-body
-        %table.table.table-hover.table-striped.table-vcenter#itemsTable{"ng-table"=>"itemsTable"}
-          %tr{"ng-repeat" => "item in data"}
-            %td.min-w-td{"data-title" => "'#'"}
-              {{item.id}}
-            %td{"data-title" => "'#{t('b1_admin.title')}'"}
-              %img.img-circle.img-sm{"ng-src" => "{{item.avatar}}"}/
-              {{item.name}}
-            %td{"data-title" => "'#{t('b1_admin.email')}'"}
-              {{item.email}}
-            %td{"data-title" => "'#{t('b1_admin.phone')}'"}
-              {{item.phone | isempty: '--/--'}}
-            %td{"data-title" => "'#{t('b1_admin.position')}'"}
-              {{item.position | isempty: '--/--'}}
-            %td{"data-title" => "'#{t('b1_admin.created_at')}'"}
-              {{item.created_at | date:'dd.MM.yyyy HH:mm '}}
-            %td{"data-title" => "'#{t('b1_admin.active')}'"}
-              %span.label.text-lg{"ng-class"=>"{'label-success':item.active,'label-danger': !item.active }"}
-                %span{"ng-switch" => "", :on => "item.active"}
-                  %span{"ng-switch-when" => "true"}=t('b1_admin._true')
-                  %span{"ng-switch-default" => ""}=t('b1_admin._false')
-            %td{"data-title" => "'#{t('b1_admin.blocked')}'"}
-              %span.label.text-lg{"ng-class"=>"{'label-danger':item.blocked,'label-success': !item.blocked }"}
-                %span{"ng-switch" => "", :on => "item.blocked"}
-                  %span{"ng-switch-when" => "true"}
-                    =t('b1_admin._true') 
-                    %i {{item.blocked_until | date:'dd.MM.yyyy HH:mm '}}
-                  %span{"ng-switch-default" => ""}=t('b1_admin._false') 
+        .panel-body
+          %table.table.table-hover.table-striped.table-vcenter#itemsTable{"ng-table"=>"itemsTable"}
+            %tr{"ng-repeat" => "item in data"}
+              %td.min-w-td{"data-title" => "'#'"}
+                {{item.id}}
+              %td{"data-title" => "'#{t('b1_admin.title')}'"}
+                %img.img-circle.img-sm{"ng-src" => "{{item.avatar}}"}/
+                {{item.name}}
+              %td{"data-title" => "'#{t('b1_admin.email')}'"}
+                {{item.email}}
+              %td{"data-title" => "'#{t('b1_admin.phone')}'"}
+                {{item.phone | isempty: '--/--'}}
+              %td{"data-title" => "'#{t('b1_admin.position')}'"}
+                {{item.position | isempty: '--/--'}}
+              %td{"data-title" => "'#{t('b1_admin.created_at')}'"}
+                {{item.created_at | date:'dd.MM.yyyy HH:mm '}}
+              %td{"data-title" => "'#{t('b1_admin.active')}'"}
+                %span.label.text-lg{"ng-class"=>"{'label-success':item.active,'label-danger': !item.active }"}
+                  %span{"ng-switch" => "", :on => "item.active"}
+                    %span{"ng-switch-when" => "true"}=t('b1_admin._true')
+                    %span{"ng-switch-default" => ""}=t('b1_admin._false')
+              %td{"data-title" => "'#{t('b1_admin.blocked')}'"}
+                %span.label.text-lg{"ng-class"=>"{'label-danger':item.blocked,'label-success': !item.blocked }"}
+                  %span{"ng-switch" => "", :on => "item.blocked"}
+                    %span{"ng-switch-when" => "true"}
+                      =t('b1_admin._true') 
+                      %i {{item.blocked_until | date:'dd.MM.yyyy HH:mm '}}
+                    %span{"ng-switch-default" => ""}=t('b1_admin._false') 
 
-            %td{"data-title" => "'#{t('b1_admin.user_actions')}'"}
-              - if user_can?(:destroy)
-                %button.btn.btn-danger{"ng-click" => "destroy(item)"}
-                  =t("b1_admin.delete")
-                  %i.fa.fa-minus-circle
-              - if user_can?(:edit)
-                %a.btn.btn-mint{href:"#{settings_admins_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_admins_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
-                  =t("b1_admin.edit")
-                  %i.fa.fa-pencil
+              %td{"data-title" => "'#{t('b1_admin.user_actions')}'"}
+                - if user_can?(:destroy)
+                  %button.btn.btn-danger{"ng-click" => "destroy(item)"}
+                    =t("b1_admin.delete")
+                    %i.fa.fa-minus-circle
+                - if user_can?(:edit)
+                  %a.btn.btn-mint{href:"#{settings_admins_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_admins_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
+                    =t("b1_admin.edit")
+                    %i.fa.fa-pencil
 
 

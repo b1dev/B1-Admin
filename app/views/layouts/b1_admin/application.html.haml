@@ -12,7 +12,7 @@
     = render "shared/error_alert"
     = render "shared/info_alert"
     = render "shared/modal_confirm"
-    #container.effect.mainnav-lg
+    #container.effect.mainnav-lg{class: content_for?(:aside) ? "aside-in aside-left aside-bright" : "" }
       / NAVBAR
       / ===================================================
       %header#navbar
@@ -113,10 +113,6 @@
       / ===================================================
       / END NAVBAR
       .boxed
-        / CONTENT CONTAINER
-        / ===================================================
-        #content-container
-          = yield
         %nav#mainnav-container
           #mainnav
             #mainnav-menu-wrap
@@ -172,11 +168,11 @@
             / ================================
             / End menu
         
-        / ===================================================
-        / END MAIN NAVIGATION
+        = yield
+
         / ASIDE
         / ===================================================
-
+        = yield :aside
         / ===================================================
         / END ASIDE
       / FOOTER

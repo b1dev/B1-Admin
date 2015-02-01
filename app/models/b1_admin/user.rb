@@ -18,7 +18,7 @@ module B1Admin
     #Relations
     has_and_belongs_to_many :roles
     #End Relations
-
+    
 
     has_attached_file :avatar, styles: { medium: "300x300>",thumb: "100x100>" }, default_url: "/assets/b1_admin/avatar-missing.png"
     
@@ -99,9 +99,7 @@ module B1Admin
     # Return all availible for user parent modules and their childs
 		# @retrun [Array<B1Admin::Module>]
     def all_user_modules
-      Rails.cache.fetch "#{self.id}_all_modules_" do 
-        @all_user_modules ||= self.roles.map(&:modules).flatten.uniq
-      end
+      @all_user_modules ||= self.roles.map(&:modules).flatten.uniq
     end
   end
 end

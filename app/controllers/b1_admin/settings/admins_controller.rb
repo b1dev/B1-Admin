@@ -15,7 +15,7 @@ module B1Admin
           format.json do
             items = B1Admin::User.page(params[:page])
             total = B1Admin::User.count
-            render json: {items:ActiveModel::ArraySerializer.new(items, each_serializer: B1Admin::Admins::ListSerializer) ,total:total}
+            render json: {items:ActiveModel::ArraySerializer.new(items, each_serializer: B1Admin::Admins::ItemSerializer) ,total:total}
           end
         end
       end
@@ -24,7 +24,7 @@ module B1Admin
       # Render a view
       ##
       def new
-        @item = B1Admin::Roles::ItemSerializer.new(B1Admin::User.new).serializable_hash
+        @item = B1Admin::Admins::ItemSerializer.new(B1Admin::User.new).serializable_hash
         render layout: !params.has_key?(:only_template)
       end
 
@@ -40,7 +40,7 @@ module B1Admin
 
 
       def edit
-        @item = B1Admin::Roles::ItemSerializer.new(@item).serializable_hash
+        @item = B1Admin::Admins::ItemSerializer.new(@item).serializable_hash
         render layout: !params.has_key?(:only_template)
       end
 

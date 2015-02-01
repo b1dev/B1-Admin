@@ -1,65 +1,66 @@
-#page-title
-	%h1.page-header.text-overflow
-		=t("b1_admin.modules")
-#page-content{:"ng-controller"=>"ModulesController",:"data-url"=>settings_modules_path, :"data-update-positions-url"=>settings_modules_update_positions_path,:"data-delete-text"=>t("b1_admin.delete_modules_confirm")}
-	.row
-		.col-md-6
-			.panel
-				.panel-heading
-					.panel-title
-						.btn.btn-mint{"ng-click"=>"collapse()"}=t("b1_admin.collapse")
-						.btn.btn-purple{"ng-click"=>"expand()"}=t("b1_admin.uncollapse")
-						- if user_can?(:update_positions)
-							.btn.btn-success{"ng-click"=>"updatePositions()"}=t("b1_admin.update_positions")
-							.btn.btn-info{"ng-click"=>"revert()"}=t("b1_admin.revert_positions")
-				.panel-body
-					%div#tree-root{"ui-tree" => ""}
-						%ol{"ng-model" => "items", "ui-tree-nodes" => ""}
-							%li{ "ng-repeat" => "item in items", "ui-tree-node" => ""}
-								%div{"ui-tree-handle" => ""}
-									%button.btn.btn-success.btn-xm.nodrag{"data-nodrag" => true, "ng-click" => "toggle(this)"}
-										%i.nodrag{"ng-class" => "{'fa fa-angle-double-right': collapsed, 'fa fa-angle-double-down': !collapsed}"}
-									{{item.name}}
-									- if user_can?(:destroy)
-										%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "destroy(this)"}
-											%i.fa.fa-minus-circle{"data-nodrag" => true}
-									- if user_can?(:edit)
-										%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
-											%i.fa.fa-pencil{"data-nodrag" => true}
-								%ol{"ng-class" => "{hidden: collapsed}", "ng-model" => "item.childs", "ui-tree-nodes" => ""}
-									%li{ "ng-repeat" => "item in item.childs", "ui-tree-node" => ""}
-										%div{"ui-tree-handle" => ""}
-											{{item.name}}
-											- if user_can?(:destroy)
-												%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "destroy(this)"}
-													%i.fa.fa-minus-circle{"data-nodrag" => true}
-											- if user_can?(:edit)
-												%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
-													%i.fa.fa-pencil{"data-nodrag" => true}
-		.col-md-6
-			.panel
-				.panel-heading
-					%h3.panel-title#new_text=t("b1_admin.new_module")
-				= form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :itemForm do 
+#content-container
+	#page-title
+		%h1.page-header.text-overflow
+			=t("b1_admin.modules")
+	#page-content{:"ng-controller"=>"ModulesController",:"data-url"=>settings_modules_path, :"data-update-positions-url"=>settings_modules_update_positions_path,:"data-delete-text"=>t("b1_admin.delete_modules_confirm")}
+		.row
+			.col-md-6
+				.panel
+					.panel-heading
+						.panel-title
+							.btn.btn-mint{"ng-click"=>"collapse()"}=t("b1_admin.collapse")
+							.btn.btn-purple{"ng-click"=>"expand()"}=t("b1_admin.uncollapse")
+							- if user_can?(:update_positions)
+								.btn.btn-success{"ng-click"=>"updatePositions()"}=t("b1_admin.update_positions")
+								.btn.btn-info{"ng-click"=>"revert()"}=t("b1_admin.revert_positions")
 					.panel-body
-						.form-group{"ng-class" => "{'has-error': itemForm.controller.$invalid && itemForm.$submitted}"}
-							= label_tag :controller, t("b1_admin.controller"), class:"col-sm-3 control-label"
-							.col-sm-9
-								= text_field_tag :controller,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.controller"
-						.form-group{"ng-class" => "{'has-error': itemForm.ico.$invalid && itemForm.$submitted}"}
-							= label_tag :ico, t("b1_admin.ico"), class:"col-sm-3 control-label"
-							.col-sm-9
-								= text_field_tag :ico,"" , class:"form-control",required: true,"ng-minlength"=>3 , "ng-model"=>"editedItem.ico"
-						.form-group{"ng-class" => "{'has-error': itemForm.parent_id.$invalid && itemForm.$submitted}"}
-							= label_tag :parent_id, t("b1_admin.parent_controller"), class:"col-sm-3 control-label"
-							.col-sm-9
-								=select_tag :parent_id,options_for_select([[t("b1_admin.is_parent"),0]] + parent_modules(0).map{|d|[d.name,d.id]},0),class:"selectpicker",required: true, "ng-model"=>"editedItem.parent_id"
-						- B1Admin::LANGS.each do |l|
-							.form-group{"ng-class" => "{'has-error': itemForm.name_#{l}.$invalid && itemForm.$submitted}"}
-								= label_tag :"name_#{l}", "#{t("b1_admin.title")} #{l.upcase}", class:"col-sm-3 control-label"
+						%div#tree-root{"ui-tree" => ""}
+							%ol{"ng-model" => "items", "ui-tree-nodes" => ""}
+								%li{ "ng-repeat" => "item in items", "ui-tree-node" => ""}
+									%div{"ui-tree-handle" => ""}
+										%button.btn.btn-success.btn-xm.nodrag{"data-nodrag" => true, "ng-click" => "toggle(this)"}
+											%i.nodrag{"ng-class" => "{'fa fa-angle-double-right': collapsed, 'fa fa-angle-double-down': !collapsed}"}
+										{{item.name}}
+										- if user_can?(:destroy)
+											%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "destroy(this)"}
+												%i.fa.fa-minus-circle{"data-nodrag" => true}
+										- if user_can?(:edit)
+											%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
+												%i.fa.fa-pencil{"data-nodrag" => true}
+									%ol{"ng-class" => "{hidden: collapsed}", "ng-model" => "item.childs", "ui-tree-nodes" => ""}
+										%li{ "ng-repeat" => "item in item.childs", "ui-tree-node" => ""}
+											%div{"ui-tree-handle" => ""}
+												{{item.name}}
+												- if user_can?(:destroy)
+													%button.pull-right.btn.btn-danger.btn-xm{"data-nodrag" => true, "ng-click" => "destroy(this)"}
+														%i.fa.fa-minus-circle{"data-nodrag" => true}
+												- if user_can?(:edit)
+													%button.pull-right.btn.btn-mint.btn-xm{"data-nodrag" => true, "ng-click" => "edit(this)",style:"margin-right: 15px;"}
+														%i.fa.fa-pencil{"data-nodrag" => true}
+			.col-md-6
+				.panel
+					.panel-heading
+						%h3.panel-title#new_text=t("b1_admin.new_module")
+					= form_tag settings_modules_path ,class: "form-horizontal",novalidate: true,name: :itemForm do 
+						.panel-body
+							.form-group{"ng-class" => "{'has-error': itemForm.controller.$invalid && itemForm.$submitted}"}
+								= label_tag :controller, t("b1_admin.controller"), class:"col-sm-3 control-label"
 								.col-sm-9
-									= text_field_tag :"name_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.name_#{l}"
-					- if user_can?(:create) || user_can?(:update)
-						.panel-footer.text-right
-							= link_to t("b1_admin.save"),"#", class:"btn btn-info","ng-click" => "save()"
+									= text_field_tag :controller,"" ,class:"form-control",required: true,"ng-minlength"=>3, "ng-model"=>"editedItem.controller"
+							.form-group{"ng-class" => "{'has-error': itemForm.ico.$invalid && itemForm.$submitted}"}
+								= label_tag :ico, t("b1_admin.ico"), class:"col-sm-3 control-label"
+								.col-sm-9
+									= text_field_tag :ico,"" , class:"form-control",required: true,"ng-minlength"=>3 , "ng-model"=>"editedItem.ico"
+							.form-group{"ng-class" => "{'has-error': itemForm.parent_id.$invalid && itemForm.$submitted}"}
+								= label_tag :parent_id, t("b1_admin.parent_controller"), class:"col-sm-3 control-label"
+								.col-sm-9
+									=select_tag :parent_id,options_for_select([[t("b1_admin.is_parent"),0]] + parent_modules(0).map{|d|[d.name,d.id]},0),class:"selectpicker",required: true, "ng-model"=>"editedItem.parent_id"
+							- B1Admin::LANGS.each do |l|
+								.form-group{"ng-class" => "{'has-error': itemForm.name_#{l}.$invalid && itemForm.$submitted}"}
+									= label_tag :"name_#{l}", "#{t("b1_admin.title")} #{l.upcase}", class:"col-sm-3 control-label"
+									.col-sm-9
+										= text_field_tag :"name_#{l}" ,"", class:"form-control",required: true,"ng-minlength"=>3  , "ng-model"=>"editedItem.name_#{l}"
+						- if user_can?(:create) || user_can?(:update)
+							.panel-footer.text-right
+								= link_to t("b1_admin.save"),"#", class:"btn btn-info","ng-click" => "save()"
 
