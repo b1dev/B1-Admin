@@ -1,5 +1,10 @@
 en:
   b1_admin:
+    from: "От"
+    to: "До"
+    loading: "Загрузка"
+    period: "Период"
+    reset_filter: Сбросить
     params: "Параметры"
     filter: "Фильтр"
     ip: "IP адресс"

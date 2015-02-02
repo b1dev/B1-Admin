@@ -15,7 +15,7 @@ module B1Admin
           end
           format.json do
             items = B1Admin::User.page(params[:page])
-            total = B1Admin::Log.count
+            total = B1Admin::User.count
             render json: {items:ActiveModel::ArraySerializer.new(items, each_serializer: B1Admin::Admins::ListSerializer) ,total:total}
           end
         end

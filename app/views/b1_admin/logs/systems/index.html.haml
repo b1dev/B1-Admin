@@ -1,4 +1,4 @@
-%div{:"ng-controller"=>"AdminLogsController",:"data-url"=>logs_systems_path,"ng-init"=>"statuses = #{t('b1_admin.statuses').to_json};modules=#{@modules.to_json};$root.updateSelect()"}   
+%div{:"ng-controller"=>"AdminLogsController",:"data-url"=>logs_systems_path,"ng-init"=>"statuses = #{t('b1_admin.statuses').to_json};modules=#{@modules.to_json};$root.updateSelect()",:"data-actions-url"=>logs_systems_actions_path}   
   #content-container
     #page-title
       %h1.page-header.text-overflow
@@ -7,30 +7,36 @@
       .row
         .panel
           .panel-body
-            %table.table.table-hover.table-striped.table-vcenter#itemsTable{"ng-table"=>"itemsTable"}
-              %tr{"ng-repeat" => "item in data"}
-                %td{"data-title" => "'#{t('b1_admin.module')}'"}
-                  {{item.module}}
-                %td{"data-title" => "'#{t('b1_admin.action')}'"}
-                  {{item.action_title}}
-                %td{"data-title" => "'#{t('b1_admin.created_at')}'"}
-                  {{item.time | asDate | date:'dd.MM.yyyy HH:mm '}}
-                %td{"data-title" => "'#{t('b1_admin.user')}'"}
-                  %b {{item.ip}} | {{item.user_name}}
-                  %br
-                  {{item.user_agent}}
-                %td{"data-title" => "'#{t('b1_admin.server')}'"}
-                  %b {{item.server_ip}}
-                %td{"data-title" => "'#{t('b1_admin.status')}'"}
-                  %span.label.text-lg{style:"background-color:{{statusColors[item.status]}}"}
-                    %span{"ng-switch" => "", :on => "item.status"}
-                      %span{"ng-switch-when" => "1"}=t('b1_admin.statuses._1')
-                      %span{"ng-switch-when" => "2"}=t('b1_admin.statuses._2')
-                      %span{"ng-switch-when" => "3"}=t('b1_admin.statuses._3')
-                      %span{"ng-switch-when" => "4"}=t('b1_admin.statuses._4')
-                %td.min-w-td.text-center{"data-title" => "'#{t('b1_admin.user_actions')}'"}
-                  - if user_can?(:show)
-                    %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-mint.fa.fa-search-plus.add-tooltip{"tooltip" => t("b1_admin.more"), :href => "#","ng-click" => "show(item)"}
+            .columns.columns-right.btn-group.pull-right
+              %button.btn.btn-default{:name => "refresh", :title => "Refresh", :type => "button","ng-click"=>"itemsTable.reload()"}
+                %i.fa.fa-refresh.icon-refresh
+            %div{style:"margin-top: 30px;"}
+              %div{"cg-busy" => "{'promise': itemsPromise,'backdrop': true,'message': '#{t('b1_admin.loading')}'}"}
+                %table.table.table-hover.table-striped.table-vcenter#itemsTable{"ng-table"=>"itemsTable"}
+                  %tr{"ng-repeat" => "item in data"}
+                    %td{"data-title" => "'#{t('b1_admin.module')}'"}
+                      {{item.module}}
+                    %td{"data-title" => "'#{t('b1_admin.action')}'"}
+                      {{item.action_title}}
+                    %td{"data-title" => "'#{t('b1_admin.created_at')}'"}
+                      {{item.time | asDate | date:'dd.MM.yyyy HH:mm '}}
+                    %td{"data-title" => "'#{t('b1_admin.user')}'"}
+                      %b {{item.ip}} | {{item.user_name}}
+                      %br
+                      {{item.user_agent}}
+                    %td{"data-title" => "'#{t('b1_admin.server')}'"}
+                      %b {{item.server_ip}}
+                    %td{"data-title" => "'#{t('b1_admin.status')}'"}
+                      %span.label.text-lg{style:"background-color:{{statusColors[item.status]}}"}
+                        %span{"ng-switch" => "", :on => "item.status"}
+                          %span{"ng-switch-when" => "1"}=t('b1_admin.statuses._1')
+                          %span{"ng-switch-when" => "2"}=t('b1_admin.statuses._2')
+                          %span{"ng-switch-when" => "3"}=t('b1_admin.statuses._3')
+                          %span{"ng-switch-when" => "4"}=t('b1_admin.statuses._4')
+                    %td.min-w-td.text-center{"data-title" => "'#{t('b1_admin.user_actions')}'"}
+                      - if user_can?(:show)
+                        %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-mint.fa.fa-search-plus.add-tooltip{"tooltip" => t("b1_admin.more"), :href => "#","ng-click" => "show(item)"}
+
   - content_for :aside do
     .hidden
   %aside#aside-container
@@ -42,6 +48,26 @@
           .panel-body
             .col-sm-12
               .form-group{"ng-class" => "{'has-error': itemForm.status.$invalid && itemForm.$submitted}"}
+                = label_tag :period, t("b1_admin.period"), class:"control-label"
+                .dropdown
+                  %a#dropdown1.dropdown-toggle{"data-target" => "#", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+                    .input-group
+                      %input.form-control{"data-ng-model" => "filters.from", :type => "text",placeholder: t("b1_admin.from")}
+                        %span.input-group-addon
+                          %i.glyphicon.glyphicon-calendar
+                  %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                    %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown1', 'minuteStep': 1 }", "data-ng-model" => "filters.from"}/
+                %br
+                .dropdown
+                  %a#dropdown2.dropdown-toggle{"data-target" => "#", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+                    .input-group
+                      %input.form-control{"data-ng-model" => "filters.to", :type => "text",placeholder: t("b1_admin.to")}
+                        %span.input-group-addon
+                          %i.glyphicon.glyphicon-calendar
+                  %ul.dropdown-menu{"aria-labelledby" => "dLabel", :role => "menu"}
+                    %datetimepicker{"data-datetimepicker-config" => "{ dropdownSelector: '#dropdown2', 'minuteStep': 1 }", "data-ng-model" => "filters.to"}/
+
+              .form-group{"ng-class" => "{'has-error': itemForm.status.$invalid && itemForm.$submitted}"}
                 = label_tag :status, t("b1_admin.status"), class:"control-label"
                 %select.selectpicker{"ng-model" => "filters.status", "ng-options" => "k as v for (k, v) in statuses"}
               .form-group{"ng-class" => "{'has-error': itemForm.controller.$invalid && itemForm.$submitted}"}
@@ -49,18 +75,20 @@
                 %select.selectpicker{"ng-model" => "filters.controller", "ng-options" => "k as v for (k, v) in modules"}
               .form-group{"ng-class" => "{'has-error': itemForm.action.$invalid && itemForm.$submitted}"}
                 = label_tag :action, t("b1_admin.action"), class:"control-label"
-                %select.selectpicker{"ng-model" => "filters.action", "ng-options" => "k as v for (k, v) in actions"}
+                %select.selectpicker{"ng-model" => "filters.action", "ng-options" => "o as o for o in actions"}
               .form-group{"ng-class" => "{'has-error': itemForm.server_ip.$invalid && itemForm.$submitted}"}
                 = label_tag :server_ip, t("b1_admin.server"), class:"control-label"
-                %select.selectpicker{"ng-model" => "filters.server_ip", "ng-options" => "k as v for (k, v) in servers"}
+                %select.selectpicker{"ng-model" => "filters.server_ip", "ng-options" => "o as o for o in servers"}
               .form-group{"ng-class" => "{'has-error': itemForm.ip.$invalid && itemForm.$submitted}"}
                 = label_tag :ip, t("b1_admin.ip"), class:"control-label"
-                = text_field_tag :ip,"" ,class:"form-control","ng-minlength"=>3, "ng-model"=>"filters.ip"
+                = text_field_tag :ip,"" ,class:"form-control","ng-minlength"=>3, "ng-model"=>"filters.ip","ng-pattern"=>'/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/',"placeholder"=>'xxx.xxx.xxx.xxx' 
+          
               .form-group{"ng-class" => "{'has-error': itemForm.ip.$invalid && itemForm.$submitted}"}
                 = label_tag :user_id, t("b1_admin.user"), class:"control-label"
-                = text_field_tag :user_id,"" ,class:"form-control", "ng-model"=>"filters.user_id"
+                %angucomplete#members{:datafield => "users", :descriptionfield => "email",:inputclass => "form-control form-control-small", :pause => "200", :placeholder => "Search users", :selectedobject => "testObj", :titlefield => "name", :url => "#{logs_systems_users_path}?term="}
           .panel-footer.text-right
             %a.btn.btn-success{"ng-click"=>"filter()"}=t("b1_admin.do_filter")
+            %a.btn.btn-warning{"ng-click"=>"reset()"}=t("b1_admin.reset_filter")
   %script{:id => "adminLog.html", :type => "text/ng-template"}
     .modal-header
       %h3.modal-title {{item.module}} - {{item.action_title}}

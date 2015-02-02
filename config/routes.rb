@@ -14,18 +14,22 @@ B1Admin::Engine.routes.draw do
   	resources :permissions
   	resources :admins
     namespace :modules do 
-      post "update_positions"
+      post :update_positions
     end
     namespace :permissions do 
-      post "actions"
+      post :actions
     end
     namespace :admins do 
-      post "upload"
-      post "history"
+      post :upload
+      post :history
     end
   end
 
   namespace :logs do 
+    namespace :systems do
+      post :actions
+      get :users
+    end
   	resources :systems
   end
 

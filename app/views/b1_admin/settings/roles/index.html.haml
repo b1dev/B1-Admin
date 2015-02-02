@@ -7,25 +7,28 @@
       .panel
         .panel-heading
           .panel-control
+            %button.btn.btn-default{:name => "refresh", :title => "Refresh", :type => "button","ng-click"=>"itemsTable.reload()"}
+              %i.fa.fa-refresh.icon-refresh
             %a.btn.btn-primary{href:new_settings_role_path,"ng-click"=>"$root.setRoute('#{new_settings_role_path}')"}=t("b1_admin.add")
           %h3.panel-title=t("b1_admin.roles_list")
 
         .panel-body
-          %table.table.table-striped#itemsTable{"ng-table"=>"itemsTable"}
-            %tr{"ng-repeat" => "item in data"}
-              %td{style:"text-align: center;", "data-title" => "'#{t('b1_admin.title')}'"}
-                {{item.name}}
-              %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.info')}'"}
-                {{item.desc}}
-                %a.fa.fa-question-circle{href:"#","popover-trigger"=>"mouseenter","popover"=>"{{item.permissions}}","popover-placement"=>"left"}
-              %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.user_actions')}'"}
-                - if user_can?(:destroy)
-                  %button.btn.btn-danger{"ng-click" => "destroy(item)"}
-                    =t("b1_admin.delete")
-                    %i.fa.fa-minus-circle
-                - if user_can?(:edit)
-                  %a.btn.btn-mint{href:"#{settings_roles_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_roles_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
-                    =t("b1_admin.edit")
-                    %i.fa.fa-pencil
+          %div{"cg-busy" => "{'promise': itemsPromise,'backdrop': true,'message': '#{t('b1_admin.loading')}'}"}
+            %table.table.table-striped#itemsTable{"ng-table"=>"itemsTable"}
+              %tr{"ng-repeat" => "item in data"}
+                %td{style:"text-align: center;", "data-title" => "'#{t('b1_admin.title')}'"}
+                  {{item.name}}
+                %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.info')}'"}
+                  {{item.desc}}
+                  %a.fa.fa-question-circle{href:"#","popover-trigger"=>"mouseenter","popover"=>"{{item.permissions}}","popover-placement"=>"left"}
+                %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.user_actions')}'"}
+                  - if user_can?(:destroy)
+                    %button.btn.btn-danger{"ng-click" => "destroy(item)"}
+                      =t("b1_admin.delete")
+                      %i.fa.fa-minus-circle
+                  - if user_can?(:edit)
+                    %a.btn.btn-mint{href:"#{settings_roles_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_roles_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
+                      =t("b1_admin.edit")
+                      %i.fa.fa-pencil
 
 

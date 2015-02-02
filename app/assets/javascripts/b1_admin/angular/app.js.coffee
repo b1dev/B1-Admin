@@ -1,4 +1,15 @@
-app = angular.module("B1Admin", ["ngRoute","ngResource","ui.tree",'ui.bootstrap','ngTable',"NgSwitchery","pwCheck"])
+app = angular.module("B1Admin", [
+  "ngRoute"
+  "ngResource"
+  "ui.tree"
+  "ui.bootstrap"
+  "ngTable"
+  "NgSwitchery"
+  "pwCheck"
+  "angucomplete"
+  "ui.bootstrap.datetimepicker"
+  "cgBusy" 
+  ])
 
 app.run [
     "$location"
@@ -52,7 +63,6 @@ app.run [
           $content.append resp
           scope = $content.scope()
           $compile($content.contents()) scope
-          console.log(angular.element("#aside-container").length)
           if angular.element("#aside-container").length
             angular.element("#container").addClass("aside-in aside-left aside-bright")
           else

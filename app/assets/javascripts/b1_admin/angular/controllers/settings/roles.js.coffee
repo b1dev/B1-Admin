@@ -20,7 +20,7 @@ angular.module("B1Admin").controller "RolesController", [
       ,
         counts: []
         getData: ($defer, params) ->
-          Item.query().$promise.then (data) ->
+          $scope.itemsPromise =  Item.query().$promise.then (data) ->
             params.total(data.total)
             $scope.data = data.items.slice((params.page() - 1) * params.count())
 

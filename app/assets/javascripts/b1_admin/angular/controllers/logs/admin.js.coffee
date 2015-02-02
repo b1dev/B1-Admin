@@ -6,12 +6,14 @@ angular.module("B1Admin").controller "AdminLogsController", [
   "Config"
   "$modal"
   "$rootScope"
-  ($scope,$resource,$element,ngTableParams,Config,$modal,$rootScope) ->
+  "$http"
+  ($scope,$resource,$element,ngTableParams,Config,$modal,$rootScope,$http) ->
 
     alertSelector = "#content-container"
-    console.log($scope.statuses)
-    $scope.filters = {afterDate: new Date(), afterTime: new Date((new Date()).getTime() - 3600*1000)}
+    dateFormat = "DD.MM.YYYY HH:mm"
 
+    $scope.filters = {from: moment(new Date()).startOf("day").format(dateFormat), to: moment(new Date()).endOf("day").format(dateFormat)}
+    filtersClone = angular.copy $scope.filters
     $scope.statusColors = 
       1: "#4EAE32"
       2: "#EED80B"
@@ -20,6 +22,19 @@ angular.module("B1Admin").controller "AdminLogsController", [
       
     Item = $resource("#{$element.data("url")}/:id.json",{},{query:{isArray:false}})
 
+    setActions = (actions) ->
+      $scope.actions = actions
+      $rootScope.updateSelect(200)
+
+    getController = ->
+      $scope.filters.controller
+    
+    getModuleActions = ->
+      $http.post($element.data("actionsUrl"), {id: getController()}).success (resp) ->
+        setActions(resp.actions) if resp.success
+      .error ->
+        $rootScope.error(alertSelector,$rootScope.server_error)
+
     $scope.itemsTable = new ngTableParams(
       page: 1 
       count: Config.perPage
@@ -27,9 +42,12 @@ angular.module("B1Admin").controller "AdminLogsController", [
     ,
       counts: []
       getData: ($defer, params) ->
-        Item.query().$promise.then (data) ->
+        $scope.itemsPromise = Item.query(
+          page: params.page()
+          filters: $scope.filters
+        ).$promise.then (data) ->
           params.total(data.total)
-          $scope.data = data.items.slice((params.page() - 1) * params.count())
+          $scope.data = data.items
 
     )
 
@@ -45,7 +63,28 @@ angular.module("B1Admin").controller "AdminLogsController", [
       , ->
         $rootScope.error(alertSelector,$rootScope.server_error)
     $scope.filter = ->
-      console.log($scope.statuses)
+      $scope.itemsTable.reload()
+
+    $scope.reset = ->
+      $scope.itemsTable.page(1)
+      $scope.filters = angular.copy filtersClone
+      $scope.itemsTable.reload()
+      $rootScope.updateSelect(200)
+
+    $scope.$watch getController, (newVal, oldVal) ->
+      getModuleActions() unless newVal is undefined
+
+    $scope.$watch "filters.from" , (newVal, oldVal) ->
+      $scope.filters.to = moment(newVal).endOf("day").format(dateFormat)
+    ,true
+    $scope.$watch "filters.status" , (newVal, oldVal) ->
+      $scope.filters.status = newVal.replace("_","") if newVal
+    ,true
+
+
+    $scope.$watch "testObj", (newVal, oldVal) ->
+      $scope.filters.user_id = newVal.originalObject.id if newVal
+      delete $scope.filters.user_id unless newVal
 ]
 
 

@@ -5,6 +5,7 @@
 //= require angular-route
 //= require angular-ui-bootstrap
 //= require angular-ui-bootstrap-tpls
+//= require ./vendor/moment-with-locales
 //= require ./vendor/pace.min
 //= require ./vendor/angular-ui-tree
 //= require ./vendor/bootstrap.min
@@ -12,6 +13,9 @@
 //= require ./vendor/ng-table
 //= require ./vendor/angular-bootstrap-switch
 //= require ./vendor/compareTo
+//= require ./vendor/angular-busy
+//= require ./vendor/datetimepicker
+//= require ./vendor/angular-autocomplete
 //= require ./angular/app
 //= require_tree ./angular/.
 //= require_self
