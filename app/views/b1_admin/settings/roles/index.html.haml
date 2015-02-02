@@ -16,19 +16,15 @@
           %div{"cg-busy" => "{'promise': itemsPromise,'backdrop': true,'message': '#{t('b1_admin.loading')}'}"}
             %table.table.table-striped#itemsTable{"ng-table"=>"itemsTable"}
               %tr{"ng-repeat" => "item in data"}
-                %td{style:"text-align: center;", "data-title" => "'#{t('b1_admin.title')}'"}
+                %td{"data-title" => "'#{t('b1_admin.title')}'"}
                   {{item.name}}
-                %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.info')}'"}
+                %td{"data-title" => "'#{t('b1_admin.info')}'"}
                   {{item.desc}}
                   %a.fa.fa-question-circle{href:"#","popover-trigger"=>"mouseenter","popover"=>"{{item.permissions}}","popover-placement"=>"left"}
-                %td{style:"text-align: center;","data-title" => "'#{t('b1_admin.user_actions')}'"}
+                %td.min-w-td.text-center{"data-title" => "'#{t('b1_admin.user_actions')}'"}
                   - if user_can?(:destroy)
-                    %button.btn.btn-danger{"ng-click" => "destroy(item)"}
-                      =t("b1_admin.delete")
-                      %i.fa.fa-minus-circle
+                    %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-danger.fa.fa-times.add-tooltip{"tooltip" => t("b1_admin.delete"), :href => "#","ng-click" => "destroy(item)"}
                   - if user_can?(:edit)
-                    %a.btn.btn-mint{href:"#{settings_roles_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_roles_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
-                      =t("b1_admin.edit")
-                      %i.fa.fa-pencil
+                    %a.btn.btn-sm.btn-trans.btn-icon.btn-hover-success.fa.fa-pencil.add-tooltip{"tooltip" => t("b1_admin.edit"),href:"#{settings_roles_path}/{{item.id}}/edit/","ng-click"=>"$root.setRoute('#{settings_roles_path}/' + item.id + '/edit/')",style:"margin-right: 15px;"}
 
 
