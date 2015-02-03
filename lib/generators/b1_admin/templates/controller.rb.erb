@@ -1,6 +1,6 @@
 module B1Admin
   module <%= module_namespace.downcase.capitalize %>
-    class <%= name.downcase.capitalize %>Controller < B1Admin::ApplicationController
+    class <%= name.pluralize.downcase.capitalize %>Controller < B1Admin::ApplicationController
     
       def index
       end

@@ -12,15 +12,23 @@ module B1Admin
       
       def create_dirs
         FileUtils::mkdir_p "app/controllers/b1_admin/"
-        FileUtils::mkdir_p "app/controllers/b1_admin/#{module_namespace}/"
+        FileUtils::mkdir_p "app/controllers/b1_admin/#{module_namespace.downcase}/"
+        FileUtils::mkdir_p "app/views/b1_admin/"
+        FileUtils::mkdir_p "app/views/b1_admin/#{module_namespace.downcase}/"
+        FileUtils::mkdir_p "app/views/b1_admin/#{module_namespace.downcase}/#{name.pluralize.downcase}/"
       end
 
       def create
-        template "controller.rb.erb", "app/controllers/b1_admin/#{module_namespace}/#{name}_controller.rb"
-        route <<-R
-          namespace :#{module_namespace} do 
-            resources :#{name}
-          end
+        template "controller.rb.erb", "app/controllers/b1_admin/#{module_namespace.downcase}/#{name.pluralize.downcase}_controller.rb"
+        template "index.html.haml", "app/views/b1_admin/#{module_namespace}/#{name.pluralize.downcase}/index.html.haml"
+
+        route <<-R 
+B1Admin::Engine.routes.draw do 
+    namespace :#{module_namespace.downcase} do 
+        resources :#{name.pluralize.downcase}
+    end
+  end
+
         R
 
       end

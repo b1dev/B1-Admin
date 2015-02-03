@@ -118,25 +118,25 @@
             #mainnav-menu-wrap
               .nano
                 .nano-content{:"ng-controller"=>"LeftPanelController"}
-                  - cache current_admin do
-                    %ul#mainnav-menu.list-group
-                      / Category name
-                      %li.list-header=t("b1_admin.allowed_modules")
-                      / Menu list item
-                      - current_admin.modules.each do |mod|
-                        %li{:"ng-class"=>"{'active': modules[#{mod.id}]}"}
-                          = link_to "#", :"ng-click"=>"toogle(#{mod.id})",class: mod.is_active?(params[:controller]) ? "active-sub" : "" do
-                            %i{class:"fa #{mod.ico}"}
-                            %span.menu-title{ :"ng-click"=>"toogle(#{mod.id})"}
-                              %strong{ :"ng-click"=>"toogle(#{mod.id})"}=mod.name
-                            - if mod.child_modules.any?
-                              %i.fa.arrow{ :"ng-click"=>"toogle(#{mod.id})"}
+                  / - cache current_admin do
+                  %ul#mainnav-menu.list-group
+                    / Category name
+                    %li.list-header=t("b1_admin.allowed_modules")
+                    / Menu list item
+                    - current_admin.modules.each do |mod|
+                      %li{:"ng-class"=>"{'active': modules[#{mod.id}]}"}
+                        = link_to "#", :"ng-click"=>"toogle(#{mod.id})",class: mod.is_active?(params[:controller]) ? "active-sub" : "" do
+                          %i{class:"fa #{mod.ico}"}
+                          %span.menu-title{ :"ng-click"=>"toogle(#{mod.id})"}
+                            %strong{ :"ng-click"=>"toogle(#{mod.id})"}=mod.name
                           - if mod.child_modules.any?
-                            %ul.collapse{:"ng-class"=>"{'in': modules[#{mod.id}]}"}
-                              - mod.child_modules.each do |m|
-                                - if current_admin.can_access_to_module?(m)
-                                  %li
-                                    =link_to m.name , send("#{mod.controller}_#{m.controller}_path") ,:"ng-click"=>"$root.setRoute('#{send("#{mod.controller}_#{m.controller}_path")}')" 
+                            %i.fa.arrow{ :"ng-click"=>"toogle(#{mod.id})"}
+                        - if mod.child_modules.any?
+                          %ul.collapse{:"ng-class"=>"{'in': modules[#{mod.id}]}"}
+                            - mod.child_modules.each do |m|
+                              - if current_admin.can_access_to_module?(m)
+                                %li
+                                  =link_to m.name , send("#{mod.controller}_#{m.controller.pluralize}_path") ,:"ng-click"=>"$root.setRoute('#{send("#{mod.controller}_#{m.controller.pluralize}_path")}')" 
                   / Widget
                   / ================================
                   .mainnav-widget
