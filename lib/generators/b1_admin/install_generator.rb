@@ -19,7 +19,12 @@ module B1Admin
 		  end
 
       def create_logs_config_file
-      	template 'mongoid.yml', File.join('config', "mongoid.yml") , collision: :skip
+      	template 'mongoid.yml.erb', File.join('config', "mongoid.yml") , collision: :skip
+      end
+
+      def copy_config
+        generate "b1_config:install"
+        template 'admin_config.yml.erb', "config/configs/admin.yml"
       end
 
 		end

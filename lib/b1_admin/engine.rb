@@ -25,6 +25,6 @@ module B1Admin
     config.assets.precompile += %w( b1_admin/login.css b1_admin/login.js)
     config.i18n.load_path += Dir[config.root.join('locales', '*.{rb,yml}').to_s]
 
-    B1Admin::Config.setup! config
+    B1Config.add_load_path "#{config.root}/config/configs"
   end
 end

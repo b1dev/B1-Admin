@@ -1,0 +1,18 @@
+defaults: &defaults
+  admin_namespase: <%= admin_namescape %> 
+  title: "B1 Dev"
+  max_password_attempts: 5
+  block_time: <%= 6.hours %>
+  sign_in_expiration: <%= 1.hour %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+deployment:
+  <<: *defaults

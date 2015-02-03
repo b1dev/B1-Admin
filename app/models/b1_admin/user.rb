@@ -3,7 +3,7 @@ module B1Admin
     COOKIE_NAME = :admin_token
     has_secure_password
     includes :roles,:modules
-    signinable expiration: B1Admin::Config.sign_in_expiration
+    signinable expiration: B1Config.get_const.sign_in_expiration
 
     #Validates
     validates :name,:email,:phone, presence: true
@@ -87,8 +87,8 @@ module B1Admin
         signin(ip, user_agent, referer)
       else
         increment!(:wrong_password_attempts)
-        if wrong_password_attempts >= B1Admin::Config.max_password_attempts
-          update!(blocked: true, blocked_until: Time.now + B1Admin::Config.block_time)
+        if wrong_password_attempts >= B1Config.get_const.max_password_attempts
+          update!(blocked: true, blocked_until: Time.now + B1Config.get_const.block_time)
         end
         nil
       end

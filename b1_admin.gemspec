@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 # Maintain your gem's version:
 require "b1_admin/version"
 require "b1_admin/langs"
-require "b1_admin/config"
+
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.version     = B1Admin::VERSION
   s.authors     = ["Chernov Alexandr"]
   s.email       = ["adok@ukr.net"]
-  s.homepage    = "TODO"
+  s.homepage    = "https://github.com/b1dev/B1-Admin"
   s.summary     = "TODO: Summary of B1Admin."
   s.description = "TODO: Description of B1Admin."
   s.license     = "MIT"
@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency "mongoid", "~> 4.0.0"
   s.add_dependency "mongo_mysql_relations"
   s.add_dependency "will_paginate_mongoid"
+  s.add_dependency "b1_config"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
