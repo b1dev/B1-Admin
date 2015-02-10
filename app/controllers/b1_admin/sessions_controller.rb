@@ -41,7 +41,7 @@ module B1Admin
             cookies[B1Admin::User::COOKIE_NAME] = token
             response[:success] = true
           else
-            if (attempts_left = (B1Config.get_const.max_password_attempts - admin.wrong_password_attempts)) > 0
+            if (attempts_left = (::B1Config.get_const.max_password_attempts - admin.wrong_password_attempts)) > 0
               response[:msg] = t('admin.wrong_password') + (t('admin.attempts_left') % [attempts_left])
             else
               response[:msg] = t('admin.wrong_password') + (t('admin.admin_blocked') + (admin.blocked_until ? t('admin.admin_blocked_until') % [admin.blocked_until.strftime("%d.%m.%Y %H:%M:%S")] : ""))

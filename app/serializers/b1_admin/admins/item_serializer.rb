@@ -1,15 +1,26 @@
 module B1Admin
-  module Admins
+  module Logs
     class ItemSerializer < ::ActiveModel::Serializer
-      attributes :avatar, :name,:email,:blocked,:phone,:position,:created_at,:blocked_until,:id,:active,:signins_count,:messages_count,:roles
-      has_many :permissions
+      attributes :id, :description,:ip,:status,:params,:user_agent,:time,:action,:controller,:module,:action_title,:user_name,:server_ip
 
-      def permissions
-        self.object.permissions.map(&:desc)
+      def id
+        self.object._id.to_s
+      end
+      def module
+        mod = B1Admin::Module.where(controller: self.object.controller).select(:"name_#{I18n.locale}").first
+        mod.nil? ? "" : mod.name
+      end
+      def module_id
+        mod = B1Admin::Module.where(controller: self.object.controller).select(:id).first
+        mod.nil? ? 0 : mod.id
+      end
+      def action_title
+        item = B1Admin::Permission.where(module_id: module_id,action:self.object.action).select(:"desc_#{I18n.locale}").first
+        item.nil? ? "" : item.desc
       end
 
-      def roles
-        self.object.role_ids.inject({}){|hash,item| hash.merge!({item.to_s.to_sym => true})}
+      def user_name
+        self.object.user.nil? ? "" : self.object.user.name
       end
     end
   end

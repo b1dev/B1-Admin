@@ -9,6 +9,7 @@ module B1Admin
 		  def init_routes # :nodoc:
 		  	route "mount B1Admin::Engine => \"/#{admin_namescape}\""
 		  end
+
 		  def init_seeds # :nodoc:
 				inject_into_file 'db/seeds.rb',"B1Admin::Engine.load_seed\n", before: File.open('db/seeds.rb', &:gets) 
 		  end
@@ -25,6 +26,12 @@ module B1Admin
       def copy_config
         generate "b1_config:install"
         template 'admin_config.yml.erb', "config/configs/admin.yml"
+      end
+
+      def init_assets
+        FileUtils::mkdir_p "app/assets/javascripts/b1_admin/"
+        FileUtils::mkdir_p "app/assets/stylesheets/b1_admin/"
+        create_file "app/assets/javascripts/b1_admin/"
       end
 
 		end

@@ -3,7 +3,7 @@
   %head
     %meta{charset: "utf-8"}
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
-    %title=B1Config.get_const.title
+    %title=::B1Config.get_const.title
     %link{href:"http://fonts.googleapis.com/css?family=Roboto:400,700,300,500", rel:"stylesheet", type: "text/css"}
     = stylesheet_link_tag    "b1_admin/login", media: "all"
     = javascript_include_tag "b1_admin/application"
@@ -17,7 +17,7 @@
           %a.box-inline{href: root_path}
             / <img alt="Nifty Admin" src="img/logo.png" class="brand-icon">
             %span.brand-title
-              = B1Config.get_const.company_name
+              = ::B1Config.get_const.company_name
               %span.text-thin=t("b1_admin.admin")
       .cls-content{:"ng-controller"=>"LoginFormController", :"data-login-url"=>url(:login), :"data-restore-url"=>url(:restore)}
         .cls-content-sm.panel

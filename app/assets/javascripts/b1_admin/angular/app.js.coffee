@@ -1,4 +1,4 @@
-app = angular.module("B1Admin", [
+AdminApp = angular.module("B1Admin", [
   "ngRoute"
   "ngResource"
   "ui.tree"
@@ -11,7 +11,7 @@ app = angular.module("B1Admin", [
   "cgBusy" 
   ])
 
-app.run [
+AdminApp.run [
     "$location"
     "$rootElement"
     "$rootScope"
@@ -80,15 +80,15 @@ app.run [
       enabled: true
       requireBase: false
   ]
-app.factory "Config", ->
+AdminApp.factory "Config", ->
   perPage: 25
 
-app.filter 'isempty', ->
+AdminApp.filter 'isempty', ->
   (input, replaceText) ->
     if input
       return input
     replaceText
 
-app.filter 'asDate', ->
+AdminApp.filter 'asDate', ->
   (input) ->
     new Date(input * 1000)

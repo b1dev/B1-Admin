@@ -3,6 +3,16 @@ module B1Admin
     class <%= name.pluralize.downcase.capitalize %>Controller < B1Admin::ApplicationController
     
       def index
+        respond_to do |format|
+          format.html do 
+            render layout: !params.has_key?(:only_template)
+          end
+          format.json do
+            items = YourModel.page(params[:page])
+            total = YourModel.count
+            render json: {items:ActiveModel::ArraySerializer.new(items, each_serializer: YourModelSerializer) ,total:total}
+          end
+        end
       end
       
     end

@@ -3,7 +3,7 @@
   %head
     %meta{charset: "utf-8"}
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
-    %title=B1Config.get_const.title
+    %title=::B1Config.get_const.title
     %link{href:"http://fonts.googleapis.com/css?family=Roboto:400,700,300,500", rel:"stylesheet", type: "text/css"}
     = stylesheet_link_tag    "b1_admin/application", media: "all"
     = javascript_include_tag "b1_admin/application"
@@ -21,9 +21,9 @@
           / ================================
           .navbar-header
             %a.navbar-brand{href:root_path}
-              = image_tag "b1_admin/logo.png", class: "brand-icon", alt: B1Config.get_const.company_name
+              = image_tag "b1_admin/logo.png", class: "brand-icon", alt: ::B1Config.get_const.company_name
               .brand-title
-                %span.brand-text=B1Config.get_const.company_name
+                %span.brand-text=::B1Config.get_const.company_name
           / ================================
           / End brand logo & name
           / Navbar Dropdown
@@ -185,7 +185,7 @@
         / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         / Remove the class name "show-fixed" and "hide-fixed" to make the content always appears.
         / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        %p.pad-lft="© 2015 “#{B1Config.get_const.title}“"
+        %p.pad-lft="© 2015 “#{::B1Config.get_const.title}“"
       / ===================================================
       / END FOOTER
       / SCROLL TOP BUTTON

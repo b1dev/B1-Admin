@@ -3,9 +3,9 @@ module B1Admin
 
     protect_from_forgery with: :exception
     after_filter :set_csrf_cookie_for_ng
-
-  	before_filter :check_access
+  	
   	before_filter :require_login
+    before_filter :check_access
   	helper_method :current_admin
   	helper_method :logged_in?
 
@@ -39,16 +39,14 @@ module B1Admin
     end
 
     def check_access
-      # return if [AdminController].include?(self.class)
-      # arr    = self.class.to_s.underscore.gsub("/","_").split("_")
-      # redirect_to admin_path unless current_admin.has_access?([arr.at(1),arr.at(2)],params[:action])
+      mod = self.class.to_s.demodulize.downcase.gsub("controller","")
+      return if ["admin"].include?(mod)
+      raise "Access Error!" unless current_admin.can? mod, params[:action] 
     end
     
     protected
     def current_admin
       @current_admin ||= B1Admin::User.authenticate_with_token(cookies[:admin_token], request.remote_ip, request.user_agent) if cookies[:admin_token]
-      #p @current_admin.modules
-     # raise
     end
 
     # you should change this to whatever logic you need

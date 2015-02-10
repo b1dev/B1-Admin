@@ -13,7 +13,7 @@ module B1Admin
     end
 
     def user_can? method_name
-      true
+      current_admin.can? params[:controller].split("/").last, params[:action]
     end
 
     def parent_modules id
@@ -29,7 +29,7 @@ module B1Admin
     #   puts "LOOKING FOR ROUTES #{method}"
     #   if method.to_s.end_with?('_path') or method.to_s.end_with?('_url')
     #     if main_app.respond_to?(method)
-    #       [B1Config.get_const.admin_namespase,main_app.send(method, *args)].join
+    #       [::B1Config.get_const.admin_namespase,main_app.send(method, *args)].join
     #     else
     #       super
     #     end

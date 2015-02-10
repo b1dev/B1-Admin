@@ -27,7 +27,7 @@ gem 'active_model_serializers'
 gem "mongoid", "~> 4.0.0"
 gem 'mongo_mysql_relations'
 gem "will_paginate_mongoid"
-#gem "b1_config",path: "/home/adok/WWW/b1_config"# git: 'https://github.com/b1dev/b1_config.git'
+gem "b1_config"
 group :development, :test do
   gem 'rspec-rails'
   gem 'habtm_generator'
