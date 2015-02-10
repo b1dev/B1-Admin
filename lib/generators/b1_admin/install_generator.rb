@@ -6,6 +6,15 @@ module B1Admin
 
 		  argument :admin_namescape, optional: false, type: :string, banner:"admin_namescape"
 
+      def copy_config
+        generate "b1_config:install"
+        template 'admin_config.yml.erb', "config/configs/admin.yml"
+        gem "haml-rails"
+        gem "b1_config"
+        gem "paperclip"
+
+      end
+
 		  def init_routes # :nodoc:
 		  	route "mount B1Admin::Engine => \"/#{admin_namescape}\""
 		  end
@@ -20,18 +29,15 @@ module B1Admin
 		  end
 
       def create_logs_config_file
-      	template 'mongoid.yml.erb', File.join('config', "mongoid.yml") , collision: :skip
+      	template 'mongoid.yml', File.join('config', "mongoid.yml") , collision: :skip
       end
 
-      def copy_config
-        generate "b1_config:install"
-        template 'admin_config.yml.erb', "config/configs/admin.yml"
-      end
+
 
       def init_assets
-        FileUtils::mkdir_p "app/assets/javascripts/b1_admin/"
-        FileUtils::mkdir_p "app/assets/stylesheets/b1_admin/"
-        create_file "app/assets/javascripts/b1_admin/"
+        # FileUtils::mkdir_p "app/assets/javascripts/b1_admin/"
+        # FileUtils::mkdir_p "app/assets/stylesheets/b1_admin/"
+        # create_file "app/assets/javascripts/b1_admin/"
       end
 
 		end
